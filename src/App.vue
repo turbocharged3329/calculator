@@ -1,19 +1,35 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Draggable :options="{
+      handle: '.calculator__header'
+    }">
+      <!-- <Resizable :options="{
+        startWidth: 200,
+        minWidth: 150,
+        startHeight: 200,
+        minHeight: 150,
+        animate: true
+      }"> -->
+        <Calculator />
+        <!-- <div class="test"></div>
+      </Resizable> -->
+    </Draggable>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Calculator from "@/components/Calculator";
+import Draggable from "@/components/Draggable";
+// import Resizable from "./components/Resizable";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    Calculator,
+    Draggable,
+    // Resizable,
+  },
+};
 </script>
 
 <style>
@@ -24,5 +40,14 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  width: 100%;
+  height: 100vh;
+}
+.test {
+  display: block;
+  border: 1px solid black;
+  background: #11ddaa;
+  width: 100%;
+  height: 100%;
 }
 </style>
