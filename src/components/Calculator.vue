@@ -12,16 +12,16 @@
         </div>
       </div>
       <div class="calculator__keyboard">
-        <div class="keyboard__btn">MC</div>
-        <div class="keyboard__btn">MR</div>
-        <div class="keyboard__btn">MS</div>
-        <div class="keyboard__btn">M+</div>
-        <div class="keyboard__btn">M-</div>
+        <div class="keyboard__btn" @click="memoryClear">MC</div>
+        <div class="keyboard__btn" @click="memoryRecovery">MR</div>
+        <div class="keyboard__btn" @click="memorySave">MS</div>
+        <div class="keyboard__btn" @click="increaseMemoryValue">M+</div>
+        <div class="keyboard__btn" @click="decreaseMemoryValue">M-</div>
         <div class="keyboard__btn" @click="deleteNumber">Del</div>
         <div class="keyboard__btn" @click="resetSecondOperand">CE</div>
         <div class="keyboard__btn" @click="resetCalcStateToDefault">C</div>
-        <div class="keyboard__btn">Xy</div>
-        <div class="keyboard__btn">√</div>
+        <div class="keyboard__btn" @click="setOperation('pow')">Xy</div>
+        <div class="keyboard__btn" @click="getSqrt">√</div>
         <div class="keyboard__btn keyboard__btn-number" @click="addNumber(7)">
           7
         </div>
@@ -32,7 +32,7 @@
           9
         </div>
         <div class="keyboard__btn" @click="setOperation('div')">/</div>
-        <div class="keyboard__btn">1/x</div>
+        <div class="keyboard__btn" @click="getInverseProportionality">1/x</div>
         <div class="keyboard__btn keyboard__btn-number" @click="addNumber(4)">
           4
         </div>
@@ -43,7 +43,7 @@
           6
         </div>
         <div class="keyboard__btn" @click="setOperation('mult')">×</div>
-        <div class="keyboard__btn">sin</div>
+        <div class="keyboard__btn" @click="getSinOrCosValue('sin')">sin</div>
         <div class="keyboard__btn keyboard__btn-number" @click="addNumber(1)">
           1
         </div>
@@ -54,7 +54,7 @@
           3
         </div>
         <div class="keyboard__btn" @click="setOperation('subst')">-</div>
-        <div class="keyboard__btn">cos</div>
+        <div class="keyboard__btn" @click="getSinOrCosValue('cos')">cos</div>
         <div class="keyboard__btn" @click="changeSign">+/-</div>
         <div class="keyboard__btn" @click="addNumber(0)">0</div>
         <div class="keyboard__btn" @click="addNumber('.')">.</div>
@@ -84,8 +84,21 @@ export default {
       lastOperand: '', //последний используемый операнд для выражения
       lastOperation: '', //последняя совершенная операция
       isMadeWithoutSecondOperand: false,
-      maxValueLength: 13,
+      maxValueLength: 13, //максимальная длина значения на экране калькулятора
+      memoryValue: '', //значения в ячейке памяти калькулятора
+      isError: false, //ошибка, сообщающая о превышении допустимого значения калькулятора
     };
+  },
+  computed: {
+    maxValue() {
+      let value = ''
+
+      for (let i = 0; i < this.maxValueLength; i++) {
+        value += 9
+      }
+
+      return value
+    }
   },
   mounted() {
     this.$refs.screen.innerHTML = 0;
@@ -108,7 +121,7 @@ export default {
         this.$refs.screen.innerHTML = "";
       } 
 
-      if (this.$refs.screen.innerHTML > 0 && this.isMadeCalculation) {
+      if (this.$refs.screen.innerHTML !== 0 && this.isMadeCalculation) {
         this.isMadeCalculation = false;
         this.lastOperand = this.$refs.screen.innerHTML 
         this.$refs.screen.innerHTML = "";
@@ -204,6 +217,16 @@ export default {
           
           this.isMadeWithoutSecondOperand = false;
           break;
+        case 'pow': 
+          this.lastOperand = this.isMadeWithoutSecondOperand ? Number(this.prevValue) : Number(this.$refs.screen.innerHTML);
+          this.lastOperation = 'pow'
+          
+          this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand 
+          ? Math.pow(Number(this.$refs.screen.innerHTML),  Number(this.prevValue))
+          : Math.pow(Number(this.prevValue) , Number(this.$refs.screen.innerHTML))
+          
+          this.isMadeWithoutSecondOperand = false;
+          break;
         case '': 
           break;
       }
@@ -224,20 +247,108 @@ export default {
         this.isMadeCalculation = true;
         this.prevValue = '';
         this.operationName = '';
+        this.transformResult()
+    },
+    /**
+     * преобразование результата на экране к формату с допустимым количеством знаков
+     * @returns void
+     */
+    transformResult() {
+        if (Number(this.$refs.screen.innerHTML) > this.maxValue) {
+          this.$refs.screen.innerHTML = 0;
+          this.isError = true;
+        } else {
+          const result = this.$refs.screen.innerHTML.split('')
+          const numbersCountToDelete = this.$refs.screen.innerHTML.length - this.maxValueLength;
+        
+          if (numbersCountToDelete > 0 ) {
+              result.splice(result.length - 1 - numbersCountToDelete, numbersCountToDelete)
+              this.$refs.screen.innerHTML = result.join('')
+          }
+        }
+    },
+    /**
+     * операция выделения квадратного корня из числа
+     * @returns void
+     */
+    getSqrt() {
+      this.$refs.screen.innerHTML = Math.sqrt(Number(this.$refs.screen.innerHTML))
+      this.transformResult()
+      this.isMadeCalculation = true; 
+    },
+    /**
+     * вывод обратной пропорциональности значения на экране
+     * @returns void
+     */
+    getInverseProportionality() {
+      this.$refs.screen.innerHTML = 1 / Number(this.$refs.screen.innerHTML)
+      this.transformResult()
+      this.isMadeCalculation = true; 
+    },
+    /**
+     * вывод синуса и косинуса числа на экране
+     * @returns void
+     */
+    getSinOrCosValue(operation) {
+      this.$refs.screen.innerHTML = Math[operation](Number(this.$refs.screen.innerHTML))
+      this.transformResult()
+      this.isMadeCalculation = true;
+    },
+    /**
+     * очистка значения в ячейке памяти калькулятора
+     * @returns void
+     */
+    memoryClear() {
+      this.memoryValue = '';
+    },
+    /**
+     * сохранение в ячейку памяти значения на экране 
+     * @returns void
+     */
+    memorySave() {
+      this.memoryValue = this.$refs.screen.innerHTML;
+      this.isMadeCalculation = true;
+    },
+    /**
+     * вывод значения в ячейке памяти на экран калькулятора
+     * @returns void
+     */
+    memoryRecovery() {
+      this.$refs.screen.innerHTML = this.memoryValue == '' ? 0 : this.memoryValue
+    },
+    /**
+     * увеличение значения в ячейке памяти на значение на экрене
+     * @returns void
+     */
+    increaseMemoryValue() {
+      this.memoryValue = this.memoryValue == '' 
+      ? this.memoryValue = 0 + Number(this.$refs.screen.innerHTML)
+      : Number(this.$refs.screen.innerHTML) + Number(this.memoryValue);
+      this.isMadeCalculation = true;
+    },
+    /**
+     * увеличение значения в ячейке памяти на значение на экрене
+     * @returns void
+     */
+    decreaseMemoryValue() {
+      this.memoryValue = this.memoryValue == '' 
+      ? this.memoryValue = 0 - Number(this.$refs.screen.innerHTML)
+      : Number(this.$refs.screen.innerHTML) - Number(this.memoryValue);
+      this.isMadeCalculation = true;
     },
     /**
      * сброс значения второго операнда
      * @returns void
      */
     resetSecondOperand() {
-      this.$refs.screen.innerHTML = 0
+      this.$refs.screen.innerHTML = 0;
     },
     /**
      * возврат калькулятора в дефолтное состояние
      * @returns void
      */
     resetCalcStateToDefault() {
-      this.$refs.screen.innerHTML = 0
+      this.$refs.screen.innerHTML = 0;
       this.isSecondOperand = false;
       this.prevValue = '';
       this.operationName = '';
@@ -250,8 +361,8 @@ export default {
 
 <style lang="css" scoped>
 @font-face {
-    font-family: Noto Sans; /* Имя шрифта */
-    src: url(../assets/fonts/NotoSans-Regular.ttf); /* Путь к файлу со шрифтом */
+  font-family: Noto Sans; 
+  src: url(../assets/fonts/NotoSans-Regular.ttf); 
 }
 
 .calculator {
