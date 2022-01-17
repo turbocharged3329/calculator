@@ -3,7 +3,7 @@
     <div class="calculator__wrapper">
       <div class="calculator__header">
         <button class="calculator__hide-btn" @click="hideCalc">
-          <img src="../assets/close.png" class="close-btn__image" />
+          <img src="../assets/calculator/close.png" class="close-btn__image" />
         </button>
       </div>
       <div class="calculator__display">
@@ -12,96 +12,142 @@
         </div>
       </div>
       <div class="calculator__keyboard">
-        <div class="keyboard__btn" @click="memoryClear">MC</div>
-        <div class="keyboard__btn" @click="memoryRecovery">MR</div>
-        <div class="keyboard__btn" @click="memorySave">MS</div>
-        <div class="keyboard__btn" @click="increaseMemoryValue">M+</div>
-        <div class="keyboard__btn" @click="decreaseMemoryValue">M-</div>
-        <div class="keyboard__btn" @click="deleteNumber">Del</div>
-        <div class="keyboard__btn" @click="resetSecondOperand">CE</div>
-        <div class="keyboard__btn" @click="resetCalcStateToDefault">C</div>
-        <div class="keyboard__btn" @click="setOperation('pow')">Xy</div>
-        <div class="keyboard__btn" @click="getSqrt">√</div>
+        <div class="keyboard__btn" @click="memoryClear">
+          <img src="../assets/calculator/mc.svg" />
+        </div>
+        <div class="keyboard__btn" @click="memoryRecovery">
+          <img src="../assets/calculator/mr.svg" />
+        </div>
+        <div class="keyboard__btn" @click="memorySave">
+          <img src="../assets/calculator/ms.svg" />
+        </div>
+        <div class="keyboard__btn" @click="increaseMemoryValue">
+          <img src="../assets/calculator/m+.svg" />
+        </div>
+        <div class="keyboard__btn" @click="decreaseMemoryValue">
+          <img src="../assets/calculator/m+.svg" />
+        </div>
+        <div class="keyboard__btn" @click="deleteNumber">
+          <img src="../assets/calculator/del.svg" />
+        </div>
+        <div class="keyboard__btn" @click="resetSecondOperand">
+          <img src="../assets/calculator/ce.svg" />
+        </div>
+        <div class="keyboard__btn" @click="resetCalcStateToDefault">
+          <img src="../assets/calculator/c.svg" />
+        </div>
+        <div class="keyboard__btn" @click="setOperation('pow')">
+          <img src="../assets/calculator/x_y.svg" />
+        </div>
+        <div class="keyboard__btn" @click="getSqrt">
+          <img src="../assets/calculator/sqrt.svg" />
+        </div>
         <div class="keyboard__btn keyboard__btn-number" @click="addNumber(7)">
-          7
+          <img src="../assets/calculator/number7.svg" />
         </div>
         <div class="keyboard__btn keyboard__btn-number" @click="addNumber(8)">
-          8
+          <img src="../assets/calculator/number8.svg" />
         </div>
         <div class="keyboard__btn keyboard__btn-number" @click="addNumber(9)">
-          9
+          <img src="../assets/calculator/number9.svg" />
         </div>
-        <div class="keyboard__btn" @click="setOperation('div')">/</div>
-        <div class="keyboard__btn" @click="getInverseProportionality">1/x</div>
+        <div class="keyboard__btn" @click="setOperation('div')">
+          <img src="../assets/calculator/slash.svg" />
+        </div>
+        <div class="keyboard__btn" @click="getInverseProportionality">
+          <img src="../assets/calculator/1-x.svg" />
+        </div>
         <div class="keyboard__btn keyboard__btn-number" @click="addNumber(4)">
-          4
+          <img src="../assets/calculator/number4.svg" />
         </div>
         <div class="keyboard__btn keyboard__btn-number" @click="addNumber(5)">
-          5
+          <img src="../assets/calculator/number5.svg" />
         </div>
         <div class="keyboard__btn keyboard__btn-number" @click="addNumber(6)">
-          6
+          <img src="../assets/calculator/number6.svg" />
         </div>
-        <div class="keyboard__btn" @click="setOperation('mult')">×</div>
-        <div class="keyboard__btn" @click="getSinOrCosValue('sin')">sin</div>
+        <div class="keyboard__btn" @click="setOperation('mult')">
+          <img src="../assets/calculator/multiply.svg" />
+        </div>
+        <div class="keyboard__btn" @click="getSinOrCosValue('sin')">
+          <img src="../assets/calculator/sin.svg" />
+        </div>
         <div class="keyboard__btn keyboard__btn-number" @click="addNumber(1)">
-          1
+          <img src="../assets/calculator/number1.svg" />
         </div>
         <div class="keyboard__btn keyboard__btn-number" @click="addNumber(2)">
-          2
+          <img src="../assets/calculator/number2.svg" />
         </div>
         <div class="keyboard__btn keyboard__btn-number" @click="addNumber(3)">
-          3
+          <img src="../assets/calculator/number3.svg" />
         </div>
-        <div class="keyboard__btn" @click="setOperation('subst')">-</div>
-        <div class="keyboard__btn" @click="getSinOrCosValue('cos')">cos</div>
-        <div class="keyboard__btn" @click="changeSign">+/-</div>
-        <div class="keyboard__btn" @click="addNumber(0)">0</div>
-        <div class="keyboard__btn" @click="addNumber('.')">.</div>
-        <div class="keyboard__btn" @click="setOperation('sum')">+</div>
-        <div class="keyboard__btn" @click="makeCalculation">=</div>
+        <div class="keyboard__btn" @click="setOperation('subst')">
+          <img src="../assets/calculator/minus.svg" />
+        </div>
+        <div class="keyboard__btn" @click="getSinOrCosValue('cos')">
+          <img src="../assets/calculator/cos.svg" />
+        </div>
+        <div class="keyboard__btn keyboard__btn-number keyboard__btn-left-bottom-rounded" @click="changeSign">
+          <img src="../assets/calculator/+_-.svg" />
+        </div>
+        <div class="keyboard__btn keyboard__btn-number" @click="addNumber(0)">
+          <img src="../assets/calculator/number0.svg" />
+        </div>
+        <div class="keyboard__btn keyboard__btn-number" @click="addNumber(',')">
+          <img src="../assets/calculator/dot.svg" />
+        </div>
+        <div class="keyboard__btn" @click="setOperation('sum')">
+          <img src="../assets/calculator/plus.svg" />
+        </div>
+        <div class="keyboard__btn keyboard__btn-right-bottom-rounded" @click="makeCalculation">
+          <img src="../assets/calculator/equal.svg" />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import {Decimal} from 'decimal.js';
 export default {
   name: "Calculator",
   components: {},
   props: {
     isHidden: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       prevValue: "", //значение, которое было на экране до введения второго операнда выражения
       operationName: "", //наименование операции
       isSecondOperand: false, //вводится ли второй операнд выражения в данный момент
-      isMadeCalculation: false, 
-      lastOperand: '', //последний используемый операнд для выражения
-      lastOperation: '', //последняя совершенная операция
+      isMadeCalculation: false,
+      lastOperand: "", //последний используемый операнд для выражения
+      lastOperation: "", //последняя совершенная операция
       isMadeWithoutSecondOperand: false,
       maxValueLength: 13, //максимальная длина значения на экране калькулятора
-      memoryValue: '', //значения в ячейке памяти калькулятора
+      memoryValue: "", //значения в ячейке памяти калькулятора
       isError: false, //ошибка, сообщающая о превышении допустимого значения калькулятора
     };
   },
   computed: {
     maxValue() {
-      let value = ''
+      let value = "";
 
       for (let i = 0; i < this.maxValueLength; i++) {
-        value += 9
+        value += 9;
       }
 
-      return value
-    }
+      return value;
+    },
   },
   mounted() {
     this.$refs.screen.innerHTML = 0;
+    const x = new Decimal(123.4567);
+    const y = new Decimal(123.4567);
+    console.log(x.plus(y).toNumber());
   },
   methods: {
     /**
@@ -109,7 +155,7 @@ export default {
      * @return void
      */
     hideCalc() {
-      this.$emit('hidden', this.isHidden)
+      this.$emit("hidden", this.isHidden);
     },
     /**
      * добавление числа к значению на дисплее
@@ -117,13 +163,13 @@ export default {
      * @returns void
      */
     addNumber(number) {
-      if (this.$refs.screen.innerHTML === '0') {
+      if (this.$refs.screen.innerHTML === "0") {
         this.$refs.screen.innerHTML = "";
-      } 
+      }
 
       if (this.$refs.screen.innerHTML !== 0 && this.isMadeCalculation) {
         this.isMadeCalculation = false;
-        this.lastOperand = this.$refs.screen.innerHTML 
+        this.lastOperand = this.$refs.screen.innerHTML;
         this.$refs.screen.innerHTML = "";
       }
 
@@ -134,11 +180,12 @@ export default {
         }
       }
 
-      if (number == '.') {
-        if (!this.$refs.screen.innerHTML.includes('.')) {
-          this.$refs.screen.innerHTML = this.$refs.screen.innerHTML == 0 
-          ? this.$refs.screen.innerHTML += '0.'
-          : this.$refs.screen.innerHTML += '.';
+      if (number == ",") {
+        if (!this.$refs.screen.innerHTML.includes(",")) {
+          this.$refs.screen.innerHTML =
+            this.$refs.screen.innerHTML == 0
+              ? (this.$refs.screen.innerHTML += "0,")
+              : (this.$refs.screen.innerHTML += ",");
         }
       } else {
         this.$refs.screen.innerHTML += number;
@@ -153,14 +200,22 @@ export default {
       let result = this.$refs.screen.innerHTML.split("");
       result.splice(result.length - 1, 1);
 
-      this.$refs.screen.innerHTML = result.length == 0 ? 0 : result.join('');
+      this.$refs.screen.innerHTML = result.length == 0 ? 0 : result.join("");
     },
     /**
      * изменение знака значения на дисплее калькулятора
      * @returns void
      */
     changeSign() {
+      if (String(this.$refs.screen.innerHTML).includes(',')) {
+        this.$refs.screen.innerHTML = this.$refs.screen.innerHTML.replace(',', '.')
+      }
+
       this.$refs.screen.innerHTML = -this.$refs.screen.innerHTML;
+
+      if (String(this.$refs.screen.innerHTML).includes('.')) {
+        this.$refs.screen.innerHTML = this.$refs.screen.innerHTML.replace('.', ',')
+      }
     },
     /**
      * установление имени операции, которую нужно провести с введенным числом и значением на дисплее калькулятора
@@ -169,129 +224,184 @@ export default {
      */
     setOperation(name) {
       this.operationName = name;
-      this.prevValue = this.$refs.screen.innerHTML; 
+      this.prevValue = this.$refs.screen.innerHTML;
     },
     /**
      * проведение вычислений
      * @returns void
      */
     makeCalculation() {
+      //заменяем запятую на точку в значениях
+      if (String(this.$refs.screen.innerHTML).includes(',')) {
+        this.$refs.screen.innerHTML = this.$refs.screen.innerHTML.replace(',', '.')
+      }
+
+      if (String(this.prevValue).includes(',')) {
+        this.prevValue = this.prevValue.replace(',', '.')
+      }
+      //производим вычисления
       switch (this.operationName) {
-        case 'sum':
-          this.lastOperand = this.isMadeWithoutSecondOperand ? Number(this.prevValue) : Number(this.$refs.screen.innerHTML);
-          this.lastOperation = 'sum';
-                    
-          this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand 
-          ? Number(this.$refs.screen.innerHTML) + Number(this.prevValue)
-          : Number(this.prevValue) + Number(this.$refs.screen.innerHTML);
-          
-          this.isMadeWithoutSecondOperand = false;
-          break;
-        case 'subst':
-          this.lastOperand = this.isMadeWithoutSecondOperand ? Number(this.prevValue) : Number(this.$refs.screen.innerHTML);
-          this.lastOperation = 'subst';
-          
-          this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand 
-          ? Number(this.$refs.screen.innerHTML) - Number(this.prevValue)
-          : Number(this.prevValue) - Number(this.$refs.screen.innerHTML)
+        case "sum":
+          this.lastOperand = this.isMadeWithoutSecondOperand
+            ? Number(this.prevValue)
+            : Number(this.$refs.screen.innerHTML);
+          this.lastOperation = "sum";
+
+          this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand
+            ? Number(this.$refs.screen.innerHTML) + Number(this.prevValue)
+            : Number(this.prevValue) + Number(this.$refs.screen.innerHTML);
 
           this.isMadeWithoutSecondOperand = false;
           break;
-        case 'mult':
-          this.lastOperand = this.isMadeWithoutSecondOperand ? Number(this.prevValue) : Number(this.$refs.screen.innerHTML);
-          this.lastOperation = 'mult'
+        case "subst":
+          this.lastOperand = this.isMadeWithoutSecondOperand
+            ? Number(this.prevValue)
+            : Number(this.$refs.screen.innerHTML);
+          this.lastOperation = "subst";
 
-          this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand 
-          ? Number(this.$refs.screen.innerHTML) * Number(this.prevValue)
-          : Number(this.prevValue) * Number(this.$refs.screen.innerHTML)
-          
+          this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand
+            ? Number(this.$refs.screen.innerHTML) - Number(this.prevValue)
+            : Number(this.prevValue) - Number(this.$refs.screen.innerHTML);
+
           this.isMadeWithoutSecondOperand = false;
           break;
-        case 'div': 
-          this.lastOperand = this.isMadeWithoutSecondOperand ? Number(this.prevValue) : Number(this.$refs.screen.innerHTML);
-          this.lastOperation = 'div'
-          
-          this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand 
-          ? Number(this.$refs.screen.innerHTML) / Number(this.prevValue)
-          : Number(this.prevValue) / Number(this.$refs.screen.innerHTML)
-          
+        case "mult":
+          this.lastOperand = this.isMadeWithoutSecondOperand
+            ? Number(this.prevValue)
+            : Number(this.$refs.screen.innerHTML);
+          this.lastOperation = "mult";
+
+          this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand
+            ? Number(this.$refs.screen.innerHTML) * Number(this.prevValue)
+            : Number(this.prevValue) * Number(this.$refs.screen.innerHTML);
+
           this.isMadeWithoutSecondOperand = false;
           break;
-        case 'pow': 
-          this.lastOperand = this.isMadeWithoutSecondOperand ? Number(this.prevValue) : Number(this.$refs.screen.innerHTML);
-          this.lastOperation = 'pow'
-          
-          this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand 
-          ? Math.pow(Number(this.$refs.screen.innerHTML),  Number(this.prevValue))
-          : Math.pow(Number(this.prevValue) , Number(this.$refs.screen.innerHTML))
-          
+        case "div":
+          this.lastOperand = this.isMadeWithoutSecondOperand
+            ? Number(this.prevValue)
+            : Number(this.$refs.screen.innerHTML);
+          this.lastOperation = "div";
+
+          this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand
+            ? Number(this.$refs.screen.innerHTML) / Number(this.prevValue)
+            : Number(this.prevValue) / Number(this.$refs.screen.innerHTML);
+
           this.isMadeWithoutSecondOperand = false;
           break;
-        case '': 
+        case "pow":
+          this.lastOperand = this.isMadeWithoutSecondOperand
+            ? Number(this.prevValue)
+            : Number(this.$refs.screen.innerHTML);
+          this.lastOperation = "pow";
+
+          this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand
+            ? Math.pow(
+                Number(this.$refs.screen.innerHTML),
+                Number(this.prevValue)
+              )
+            : Math.pow(
+                Number(this.prevValue),
+                Number(this.$refs.screen.innerHTML)
+              );
+
+          this.isMadeWithoutSecondOperand = false;
+          break;
+        case "":
           break;
       }
 
-      if (this.$refs.screen.innerHTML > 0 && this.operationName == '' && !this.isMadeCalculation && this.lastOperand) {
-        this.$refs.screen.innerHTML = this.lastOperand
+      if (
+        this.$refs.screen.innerHTML > 0 &&
+        this.operationName == "" &&
+        !this.isMadeCalculation &&
+        this.lastOperand
+      ) {
+        this.$refs.screen.innerHTML = this.lastOperand;
       }
 
       if (this.lastOperation && this.isMadeCalculation && this.lastOperand) {
         this.prevValue = this.lastOperand;
-        this.operationName = this.lastOperation
-        this.isMadeCalculation = false
+        this.operationName = this.lastOperation;
+        this.isMadeCalculation = false;
         this.isMadeWithoutSecondOperand = true;
-        this.makeCalculation()
+        this.makeCalculation();
       }
 
-        this.isSecondOperand = false;
-        this.isMadeCalculation = true;
-        this.prevValue = '';
-        this.operationName = '';
-        this.transformResult()
+      this.isSecondOperand = false;
+      this.isMadeCalculation = true;
+      this.prevValue = "";
+      this.operationName = "";
+      this.transformResult();
+      
+      if (String(this.$refs.screen.innerHTML).includes('.')) {
+        this.$refs.screen.innerHTML = this.$refs.screen.innerHTML.replace('.', ',')
+      }
     },
     /**
      * преобразование результата на экране к формату с допустимым количеством знаков
      * @returns void
      */
     transformResult() {
-        if (Number(this.$refs.screen.innerHTML) > this.maxValue) {
-          this.$refs.screen.innerHTML = 0;
-          this.isError = true;
-        } else {
-          const result = this.$refs.screen.innerHTML.split('')
-          const numbersCountToDelete = this.$refs.screen.innerHTML.length - this.maxValueLength;
-        
-          if (numbersCountToDelete > 0 ) {
-              result.splice(result.length - 1 - numbersCountToDelete, numbersCountToDelete)
-              this.$refs.screen.innerHTML = result.join('')
-          }
+      if (Number(this.$refs.screen.innerHTML) > this.maxValue) {
+        this.$refs.screen.innerHTML = 0;
+        this.isError = true;
+      } else {
+        const result = this.$refs.screen.innerHTML.split("");
+        const numbersCountToDelete =
+          this.$refs.screen.innerHTML.length - this.maxValueLength;
+
+        if (numbersCountToDelete > 0) {
+          result.splice(
+            result.length - 1 - numbersCountToDelete,
+            numbersCountToDelete
+          );
+          this.$refs.screen.innerHTML = result.join("");
         }
+      }
     },
     /**
      * операция выделения квадратного корня из числа
      * @returns void
      */
     getSqrt() {
-      this.$refs.screen.innerHTML = Math.sqrt(Number(this.$refs.screen.innerHTML))
-      this.transformResult()
-      this.isMadeCalculation = true; 
+      if (String(this.$refs.screen.innerHTML).includes(',')) {
+        this.$refs.screen.innerHTML = this.$refs.screen.innerHTML.replace(',', '.')
+      }
+
+      if (Number(this.$refs.screen.innerHTML) < 0) {
+        this.$refs.screen.innerHTML = 0;
+        this.isError = true;
+      } else {
+        this.$refs.screen.innerHTML = Math.sqrt(
+        Number(this.$refs.screen.innerHTML)
+        );
+        this.transformResult();
+        this.isMadeCalculation = true;
+      }
+      
+      if (String(this.$refs.screen.innerHTML).includes('.')) {
+        this.$refs.screen.innerHTML = this.$refs.screen.innerHTML.replace('.', ',')
+      }
     },
     /**
      * вывод обратной пропорциональности значения на экране
      * @returns void
      */
     getInverseProportionality() {
-      this.$refs.screen.innerHTML = 1 / Number(this.$refs.screen.innerHTML)
-      this.transformResult()
-      this.isMadeCalculation = true; 
+      this.$refs.screen.innerHTML = 1 / Number(this.$refs.screen.innerHTML);
+      this.transformResult();
+      this.isMadeCalculation = true;
     },
     /**
      * вывод синуса и косинуса числа на экране
      * @returns void
      */
     getSinOrCosValue(operation) {
-      this.$refs.screen.innerHTML = Math[operation](Number(this.$refs.screen.innerHTML))
-      this.transformResult()
+      this.$refs.screen.innerHTML = Math[operation](
+        Number(this.$refs.screen.innerHTML)
+      );
+      this.transformResult();
       this.isMadeCalculation = true;
     },
     /**
@@ -299,10 +409,16 @@ export default {
      * @returns void
      */
     memoryClear() {
-      this.memoryValue = '';
+      this.memoryValue = "";
     },
     /**
-     * сохранение в ячейку памяти значения на экране 
+     * замена символа в строке 
+     */
+    stringReplace() {
+
+    },
+    /**
+     * сохранение в ячейку памяти значения на экране
      * @returns void
      */
     memorySave() {
@@ -314,16 +430,18 @@ export default {
      * @returns void
      */
     memoryRecovery() {
-      this.$refs.screen.innerHTML = this.memoryValue == '' ? 0 : this.memoryValue
+      this.$refs.screen.innerHTML =
+        this.memoryValue == "" ? 0 : this.memoryValue;
     },
     /**
      * увеличение значения в ячейке памяти на значение на экрене
      * @returns void
      */
     increaseMemoryValue() {
-      this.memoryValue = this.memoryValue == '' 
-      ? this.memoryValue = 0 + Number(this.$refs.screen.innerHTML)
-      : Number(this.$refs.screen.innerHTML) + Number(this.memoryValue);
+      this.memoryValue =
+        this.memoryValue == ""
+          ? (this.memoryValue = 0 + Number(this.$refs.screen.innerHTML))
+          : Number(this.$refs.screen.innerHTML) + Number(this.memoryValue);
       this.isMadeCalculation = true;
     },
     /**
@@ -331,9 +449,10 @@ export default {
      * @returns void
      */
     decreaseMemoryValue() {
-      this.memoryValue = this.memoryValue == '' 
-      ? this.memoryValue = 0 - Number(this.$refs.screen.innerHTML)
-      : Number(this.$refs.screen.innerHTML) - Number(this.memoryValue);
+      this.memoryValue =
+        this.memoryValue == ""
+          ? (this.memoryValue = 0 - Number(this.$refs.screen.innerHTML))
+          : Number(this.$refs.screen.innerHTML) - Number(this.memoryValue);
       this.isMadeCalculation = true;
     },
     /**
@@ -350,19 +469,19 @@ export default {
     resetCalcStateToDefault() {
       this.$refs.screen.innerHTML = 0;
       this.isSecondOperand = false;
-      this.prevValue = '';
-      this.operationName = '';
-      this.lastOperand = '';
-      this.lastOperation = '';
-    }
+      this.prevValue = "";
+      this.operationName = "";
+      this.lastOperand = "";
+      this.lastOperation = "";
+    },
   },
 };
 </script>
 
 <style lang="css" scoped>
 @font-face {
-  font-family: Noto Sans; 
-  src: url(../assets/fonts/NotoSans-Regular.ttf); 
+  font-family: Noto Sans;
+  src: url(../assets/fonts/NotoSans-Regular.ttf);
 }
 
 .calculator {
@@ -394,6 +513,10 @@ export default {
   height: 30px;
   border: none;
   background: transparent;
+  border-radius: 0px 10px 0px 0px;
+}
+.calculator__hide-btn:hover {
+  background: #00727e;
 }
 .close-btn__image {
   display: block;
@@ -402,7 +525,7 @@ export default {
 }
 .calculator__display {
   background: #008f9e;
-  height: 76px;
+  height: 70px;
   padding: 3px;
 }
 .screen {
@@ -427,6 +550,8 @@ export default {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  width: 300px;
+  padding: 0 3px 3px 3px;
 }
 .keyboard__btn {
   display: flex;
@@ -436,7 +561,16 @@ export default {
   height: 60px;
   cursor: pointer;
 }
+.keyboard__btn:hover {
+  background: #00727e;
+}
 .keyboard__btn-number {
   background: #0097a7;
+}
+.keyboard__btn-left-bottom-rounded {
+  border-radius: 0px 0px 0px 5px;
+}
+.keyboard__btn-right-bottom-rounded {
+  border-radius: 0px 0px 5px 0px;
 }
 </style>
