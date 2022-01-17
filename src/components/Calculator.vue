@@ -8,6 +8,12 @@
       </div>
       <div class="calculator__display">
         <div class="screen">
+          <div class="screen__memory-sign" v-show="memoryValue">
+            <img src="../assets/calculator/memo.svg" />
+          </div>
+          <div class="screen__error-sign" v-show="isError">
+            <img src="../assets/calculator/error.svg" />
+          </div>
           <p class="screen__value" ref="screen"></p>
         </div>
       </div>
@@ -22,10 +28,10 @@
           <img src="../assets/calculator/ms.svg" />
         </div>
         <div class="keyboard__btn" @click="increaseMemoryValue">
-          <img src="../assets/calculator/m+.svg" />
+          <img src="../assets/calculator/mincr.svg" />
         </div>
         <div class="keyboard__btn" @click="decreaseMemoryValue">
-          <img src="../assets/calculator/m+.svg" />
+          <img src="../assets/calculator/mdecr.svg" />
         </div>
         <div class="keyboard__btn" @click="deleteNumber">
           <img src="../assets/calculator/del.svg" />
@@ -145,9 +151,6 @@ export default {
   },
   mounted() {
     this.$refs.screen.innerHTML = 0;
-    const x = new Decimal(123.4567);
-    const y = new Decimal(123.4567);
-    console.log(x.plus(y).toNumber());
   },
   methods: {
     /**
@@ -163,58 +166,59 @@ export default {
      * @returns void
      */
     addNumber(number) {
-      if (this.$refs.screen.innerHTML === "0") {
-        this.$refs.screen.innerHTML = "";
-      }
-
-      if (this.$refs.screen.innerHTML !== 0 && this.isMadeCalculation) {
-        this.isMadeCalculation = false;
-        this.lastOperand = this.$refs.screen.innerHTML;
-        this.$refs.screen.innerHTML = "";
-      }
-
-      if (!this.isSecondOperand) {
-        if (this.prevValue && this.operationName) {
-          this.isSecondOperand = true;
+      if (!this.isError) {
+        //если в данный момент на экране 0, то заменяем его новым введенным значением
+        if (this.$refs.screen.innerHTML === "0") {
           this.$refs.screen.innerHTML = "";
         }
-      }
-
-      if (number == ",") {
-        if (!this.$refs.screen.innerHTML.includes(",")) {
-          this.$refs.screen.innerHTML =
-            this.$refs.screen.innerHTML == 0
-              ? (this.$refs.screen.innerHTML += "0,")
-              : (this.$refs.screen.innerHTML += ",");
+        //если на экране результат только что выполненного вычисления, то записываем его в переменную
+        if (this.$refs.screen.innerHTML !== 0 && this.isMadeCalculation) {
+          this.isMadeCalculation = false;
+          this.lastOperand = this.$refs.screen.innerHTML;
+          this.$refs.screen.innerHTML = "";
         }
-      } else {
-        this.$refs.screen.innerHTML += number;
+  
+        if (!this.isSecondOperand) {
+          if (this.prevValue && this.operationName) {
+            this.isSecondOperand = true;
+            this.$refs.screen.innerHTML = "";
+          }
+        }
+  
+        if (number == ",") {
+          if (!this.$refs.screen.innerHTML.includes(",")) {
+            this.$refs.screen.innerHTML =
+              this.$refs.screen.innerHTML == 0
+                ? (this.$refs.screen.innerHTML += "0,")
+                : (this.$refs.screen.innerHTML += ",");
+          }
+        } else {
+          this.$refs.screen.innerHTML += number;
+        }
+        this.isMadeCalculation = false;
       }
-      this.isMadeCalculation = false;
     },
     /**
      * удаление числа с конца значения на дисплее калькулятора
      * @returns void
      */
     deleteNumber() {
-      let result = this.$refs.screen.innerHTML.split("");
-      result.splice(result.length - 1, 1);
-
-      this.$refs.screen.innerHTML = result.length == 0 ? 0 : result.join("");
+      if (!this.isError) {
+        let result = this.$refs.screen.innerHTML.split("");
+        result.splice(result.length - 1, 1);
+  
+        this.$refs.screen.innerHTML = result.length == 0 ? 0 : result.join("");
+      }
     },
     /**
      * изменение знака значения на дисплее калькулятора
      * @returns void
      */
     changeSign() {
-      if (String(this.$refs.screen.innerHTML).includes(',')) {
-        this.$refs.screen.innerHTML = this.$refs.screen.innerHTML.replace(',', '.')
-      }
-
-      this.$refs.screen.innerHTML = -this.$refs.screen.innerHTML;
-
-      if (String(this.$refs.screen.innerHTML).includes('.')) {
-        this.$refs.screen.innerHTML = this.$refs.screen.innerHTML.replace('.', ',')
+      if (!this.isError) {
+        this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, ',', '.')
+        this.$refs.screen.innerHTML = -this.$refs.screen.innerHTML;
+        this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, '.', ',')
       }
     },
     /**
@@ -223,119 +227,123 @@ export default {
      * @returns void
      */
     setOperation(name) {
-      this.operationName = name;
-      this.prevValue = this.$refs.screen.innerHTML;
+      if (!this.isError) {
+        this.operationName = name;
+        this.prevValue = this.stringReplace(this.$refs.screen.innerHTML, ',', '.');
+      }
     },
     /**
      * проведение вычислений
      * @returns void
      */
     makeCalculation() {
-      //заменяем запятую на точку в значениях
-      if (String(this.$refs.screen.innerHTML).includes(',')) {
-        this.$refs.screen.innerHTML = this.$refs.screen.innerHTML.replace(',', '.')
-      }
-
-      if (String(this.prevValue).includes(',')) {
-        this.prevValue = this.prevValue.replace(',', '.')
-      }
-      //производим вычисления
-      switch (this.operationName) {
-        case "sum":
-          this.lastOperand = this.isMadeWithoutSecondOperand
-            ? Number(this.prevValue)
-            : Number(this.$refs.screen.innerHTML);
-          this.lastOperation = "sum";
-
-          this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand
-            ? Number(this.$refs.screen.innerHTML) + Number(this.prevValue)
-            : Number(this.prevValue) + Number(this.$refs.screen.innerHTML);
-
-          this.isMadeWithoutSecondOperand = false;
-          break;
-        case "subst":
-          this.lastOperand = this.isMadeWithoutSecondOperand
-            ? Number(this.prevValue)
-            : Number(this.$refs.screen.innerHTML);
-          this.lastOperation = "subst";
-
-          this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand
-            ? Number(this.$refs.screen.innerHTML) - Number(this.prevValue)
-            : Number(this.prevValue) - Number(this.$refs.screen.innerHTML);
-
-          this.isMadeWithoutSecondOperand = false;
-          break;
-        case "mult":
-          this.lastOperand = this.isMadeWithoutSecondOperand
-            ? Number(this.prevValue)
-            : Number(this.$refs.screen.innerHTML);
-          this.lastOperation = "mult";
-
-          this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand
-            ? Number(this.$refs.screen.innerHTML) * Number(this.prevValue)
-            : Number(this.prevValue) * Number(this.$refs.screen.innerHTML);
-
-          this.isMadeWithoutSecondOperand = false;
-          break;
-        case "div":
-          this.lastOperand = this.isMadeWithoutSecondOperand
-            ? Number(this.prevValue)
-            : Number(this.$refs.screen.innerHTML);
-          this.lastOperation = "div";
-
-          this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand
-            ? Number(this.$refs.screen.innerHTML) / Number(this.prevValue)
-            : Number(this.prevValue) / Number(this.$refs.screen.innerHTML);
-
-          this.isMadeWithoutSecondOperand = false;
-          break;
-        case "pow":
-          this.lastOperand = this.isMadeWithoutSecondOperand
-            ? Number(this.prevValue)
-            : Number(this.$refs.screen.innerHTML);
-          this.lastOperation = "pow";
-
-          this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand
-            ? Math.pow(
-                Number(this.$refs.screen.innerHTML),
-                Number(this.prevValue)
-              )
-            : Math.pow(
-                Number(this.prevValue),
-                Number(this.$refs.screen.innerHTML)
-              );
-
-          this.isMadeWithoutSecondOperand = false;
-          break;
-        case "":
-          break;
-      }
-
-      if (
-        this.$refs.screen.innerHTML > 0 &&
-        this.operationName == "" &&
-        !this.isMadeCalculation &&
-        this.lastOperand
-      ) {
-        this.$refs.screen.innerHTML = this.lastOperand;
-      }
-
-      if (this.lastOperation && this.isMadeCalculation && this.lastOperand) {
-        this.prevValue = this.lastOperand;
-        this.operationName = this.lastOperation;
-        this.isMadeCalculation = false;
-        this.isMadeWithoutSecondOperand = true;
-        this.makeCalculation();
-      }
-
-      this.isSecondOperand = false;
-      this.isMadeCalculation = true;
-      this.prevValue = "";
-      this.operationName = "";
-      this.transformResult();
-      
-      if (String(this.$refs.screen.innerHTML).includes('.')) {
-        this.$refs.screen.innerHTML = this.$refs.screen.innerHTML.replace('.', ',')
+      if (!this.isError) {
+        if (this.prevValue === '' && this.isMadeCalculation && this.lastOperand !== '' && this.lastOperation !== '') {
+          this.prevValue = this.lastOperand
+          this.operationName = this.lastOperation;
+          this.isMadeWithoutSecondOperand = true
+        }
+        //заменяем запятую на точку в значениях
+        this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, ',', '.')
+        this.prevValue = this.stringReplace(this.prevValue, ',', '.')
+  
+        this.$refs.screen.innerHTML = new Decimal(this.$refs.screen.innerHTML)
+        const screenResult = new Decimal(this.$refs.screen.innerHTML)
+        this.prevValue = new Decimal(this.prevValue)
+        
+        //производим вычисления
+        switch (this.operationName) {
+          case "sum":
+            this.lastOperand = this.isMadeWithoutSecondOperand
+              ? this.prevValue
+              : screenResult;
+            this.lastOperation = "sum";
+            this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand
+              ? screenResult.plus(this.prevValue) 
+              : this.prevValue.plus(screenResult);
+  
+            this.isMadeWithoutSecondOperand = false;
+            break;
+          case "subst":
+            this.lastOperand = this.isMadeWithoutSecondOperand
+              ? this.prevValue
+              : screenResult;
+            this.lastOperation = "subst";
+  
+            this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand
+              ? screenResult.minus(this.prevValue)
+              : this.prevValue.minus(screenResult);
+  
+            this.isMadeWithoutSecondOperand = false;
+            break;
+          case "mult":
+            this.lastOperand = this.isMadeWithoutSecondOperand
+              ? this.prevValue
+              : screenResult;
+            this.lastOperation = "mult";
+  
+            this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand
+              ? screenResult.mul(this.prevValue)
+              : this.prevValue.mul(screenResult);
+  
+            this.isMadeWithoutSecondOperand = false;
+            break;
+          case "div":
+            this.lastOperand = this.isMadeWithoutSecondOperand
+              ? this.prevValue
+              : screenResult;
+            this.lastOperation = "div";
+  
+            if (this.isMadeWithoutSecondOperand) {
+              if (this.prevValue == '0') {
+                this.$refs.screen.innerHTML = 0;
+                this.isError = true;
+              } else {
+                this.$refs.screen.innerHTML = screenResult.div(this.prevValue)
+              }
+            } else {
+              if (this.$refs.screen.innerHTML == '0') {
+                this.$refs.screen.innerHTML = 0;
+                this.isError = true;
+              } else {
+                this.$refs.screen.innerHTML = this.prevValue.div(screenResult)
+              }
+            }
+  
+            this.isMadeWithoutSecondOperand = false;
+            break;
+          case "pow":
+            this.lastOperand = this.isMadeWithoutSecondOperand
+              ? this.prevValue
+              : screenResult;
+            this.lastOperation = "pow";
+  
+            this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand
+              ? screenResult.pow(this.prevValue)
+              : this.prevValue.pow(screenResult);
+  
+            this.isMadeWithoutSecondOperand = false;
+            break;
+          case "":
+            break;
+        }
+  
+        if (
+          this.$refs.screen.innerHTML > 0 &&
+          this.operationName == "" &&
+          !this.isMadeCalculation &&
+          this.lastOperand
+        ) {
+          this.$refs.screen.innerHTML = this.lastOperand;
+        }
+  
+        this.isSecondOperand = false;
+        this.isMadeCalculation = true;
+        this.prevValue = "";
+        this.operationName = "";
+        this.transformResult();
+        //заменяем точку на запятую в получившемся значении
+        this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, '.', ',')
       }
     },
     /**
@@ -365,23 +373,21 @@ export default {
      * @returns void
      */
     getSqrt() {
-      if (String(this.$refs.screen.innerHTML).includes(',')) {
-        this.$refs.screen.innerHTML = this.$refs.screen.innerHTML.replace(',', '.')
-      }
-
-      if (Number(this.$refs.screen.innerHTML) < 0) {
-        this.$refs.screen.innerHTML = 0;
-        this.isError = true;
-      } else {
-        this.$refs.screen.innerHTML = Math.sqrt(
-        Number(this.$refs.screen.innerHTML)
-        );
-        this.transformResult();
-        this.isMadeCalculation = true;
-      }
-      
-      if (String(this.$refs.screen.innerHTML).includes('.')) {
-        this.$refs.screen.innerHTML = this.$refs.screen.innerHTML.replace('.', ',')
+      if (!this.isError) {
+        this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, ',', '.')
+  
+        if (Number(this.$refs.screen.innerHTML) < 0) {
+          this.$refs.screen.innerHTML = 0;
+          this.isError = true;
+        } else {
+          this.$refs.screen.innerHTML = Math.sqrt(
+          Number(this.$refs.screen.innerHTML)
+          );
+          this.transformResult();
+          this.isMadeCalculation = true;
+        }
+  
+        this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, '.', ',')
       }
     },
     /**
@@ -389,78 +395,106 @@ export default {
      * @returns void
      */
     getInverseProportionality() {
-      this.$refs.screen.innerHTML = 1 / Number(this.$refs.screen.innerHTML);
-      this.transformResult();
-      this.isMadeCalculation = true;
+      if (!this.isError) {
+        this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, ',', '.')
+        this.$refs.screen.innerHTML = 1 / Number(this.$refs.screen.innerHTML);
+        this.transformResult();
+        this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, '.', ',')
+        this.isMadeCalculation = true;
+      }
     },
     /**
      * вывод синуса и косинуса числа на экране
      * @returns void
      */
     getSinOrCosValue(operation) {
+      this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, ',', '.')
       this.$refs.screen.innerHTML = Math[operation](
         Number(this.$refs.screen.innerHTML)
       );
       this.transformResult();
+      this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, '.', ',')
       this.isMadeCalculation = true;
+      this.isError = false;
     },
     /**
      * очистка значения в ячейке памяти калькулятора
      * @returns void
      */
     memoryClear() {
-      this.memoryValue = "";
+      if (!this.isError) {
+        this.memoryValue = "";
+      }
     },
     /**
-     * замена символа в строке 
+     * замена символа в строке (метод для замены запятых и точек в значении)
+     * @param {Number, String} - строка со значением
+     * @param {String} replacingElem - заменяемый символ или часть строки
+     * @param {String} replacуTo - символ или часть строки, на который планируется замена
+     * @returns {String}
      */
-    stringReplace() {
-
+    stringReplace(value, replacingElem, replaceTo) {
+      if (String(value).includes(replacingElem)) {
+        const newValue = String(value).replace(replacingElem, replaceTo)
+        return newValue
+      } else {
+        return value
+      }
     },
     /**
      * сохранение в ячейку памяти значения на экране
      * @returns void
      */
     memorySave() {
-      this.memoryValue = this.$refs.screen.innerHTML;
-      this.isMadeCalculation = true;
+      if (!this.isError) {
+        this.memoryValue = this.stringReplace(this.$refs.screen.innerHTML, ',', '.');
+        this.isMadeCalculation = true;
+      }
     },
     /**
      * вывод значения в ячейке памяти на экран калькулятора
      * @returns void
      */
     memoryRecovery() {
-      this.$refs.screen.innerHTML =
-        this.memoryValue == "" ? 0 : this.memoryValue;
+      if (!this.isError) {
+        this.$refs.screen.innerHTML =
+          this.memoryValue == "" ? 0 : this.stringReplace(this.memoryValue, '.', ',');
+      }
     },
     /**
      * увеличение значения в ячейке памяти на значение на экрене
      * @returns void
      */
     increaseMemoryValue() {
-      this.memoryValue =
-        this.memoryValue == ""
-          ? (this.memoryValue = 0 + Number(this.$refs.screen.innerHTML))
-          : Number(this.$refs.screen.innerHTML) + Number(this.memoryValue);
-      this.isMadeCalculation = true;
+      if (!this.isError) {
+        this.memoryValue =
+          this.memoryValue == ""
+            ? (this.memoryValue = 0 + Number(this.stringReplace(this.$refs.screen.innerHTML, ',', '.')))
+            : Number(this.stringReplace(this.$refs.screen.innerHTML, ',', '.')) + this.memoryValue;
+        this.isMadeCalculation = true;
+      }
     },
     /**
      * увеличение значения в ячейке памяти на значение на экрене
      * @returns void
      */
     decreaseMemoryValue() {
-      this.memoryValue =
-        this.memoryValue == ""
-          ? (this.memoryValue = 0 - Number(this.$refs.screen.innerHTML))
-          : Number(this.$refs.screen.innerHTML) - Number(this.memoryValue);
-      this.isMadeCalculation = true;
+      if (!this.isError) {
+        this.memoryValue =
+          this.memoryValue == ""
+            ? (this.memoryValue = 0 - Number(this.stringReplace(this.$refs.screen.innerHTML, ',', '.')))
+            : Number(this.stringReplace(this.$refs.screen.innerHTML, ',', '.')) - Number(this.memoryValue);
+        this.isMadeCalculation = true;
+      }
     },
     /**
      * сброс значения второго операнда
      * @returns void
      */
     resetSecondOperand() {
-      this.$refs.screen.innerHTML = 0;
+      if (!this.isError) {
+        this.$refs.screen.innerHTML = 0;
+      }
     },
     /**
      * возврат калькулятора в дефолтное состояние
@@ -473,6 +507,7 @@ export default {
       this.operationName = "";
       this.lastOperand = "";
       this.lastOperation = "";
+      this.isError = false;
     },
   },
 };
@@ -539,6 +574,7 @@ export default {
   font-weight: 400;
   font-size: 40px;
   line-height: 36px;
+  position: relative;
 }
 .screen__value {
   margin: 14px 7px 15px 8px;
@@ -572,5 +608,23 @@ export default {
 }
 .keyboard__btn-right-bottom-rounded {
   border-radius: 0px 0px 5px 0px;
+}
+.screen__memory-sign {
+  display: block;
+  width: 26px;
+  height: 28px;
+  font-size: 15px;
+  position: absolute;
+  bottom: 0px;
+  left: 5px;
+}
+.screen__error-sign {
+  display: block;
+  width: 26px;
+  height: 28px;
+  font-size: 15px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
 }
 </style>
