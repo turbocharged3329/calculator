@@ -193,7 +193,11 @@ export default {
                 : (this.$refs.screen.innerHTML += ",");
           }
         } else {
-          this.$refs.screen.innerHTML += number;
+          if ((this.$refs.screen.innerHTML + number).length > this.maxValueLength) {
+            this.isError = true
+          } else {
+            this.$refs.screen.innerHTML += number;
+          }
         }
         this.isMadeCalculation = false;
       }
@@ -243,6 +247,14 @@ export default {
           this.operationName = this.lastOperation;
           this.isMadeWithoutSecondOperand = true
         }
+
+        if (
+          this.$refs.screen.innerHTML > 0 && this.operationName == "" && !this.isMadeCalculation && this.lastOperand
+        ) {
+          this.$refs.screen.innerHTML = this.lastOperand;
+          return
+        }
+
         //заменяем запятую на точку в значениях
         this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, ',', '.')
         this.prevValue = this.stringReplace(this.prevValue, ',', '.')
@@ -326,15 +338,6 @@ export default {
             break;
           case "":
             break;
-        }
-  
-        if (
-          this.$refs.screen.innerHTML > 0 &&
-          this.operationName == "" &&
-          !this.isMadeCalculation &&
-          this.lastOperand
-        ) {
-          this.$refs.screen.innerHTML = this.lastOperand;
         }
   
         this.isSecondOperand = false;
