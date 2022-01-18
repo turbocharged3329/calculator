@@ -370,7 +370,7 @@ export default {
         this.$refs.screen.innerHTML = 0;
         this.isError = true;
       } else {
-        const result = this.$refs.screen.innerHTML.split("");
+        let result = this.$refs.screen.innerHTML.split("");
         //записываем в переменную количество знаков с конца значения, которое нужно удалить, чтобы значение поместилось на экране
         const numbersCountToDelete =
           this.$refs.screen.innerHTML.length - this.maxValueLength;
@@ -379,6 +379,11 @@ export default {
             result.length - 1 - numbersCountToDelete,
             numbersCountToDelete
           );
+          //если значение вычисляемого квадратного корня максимально близко к единице и превышает по длине максимальное кол-во символов на экране,
+          //то присваиваем значению на экране 1
+          if (result.filter(elem => elem === '0').length == this.maxValueLength - 3) {
+            result = [1]
+          }
           this.$refs.screen.innerHTML = result.join("");
         }
       }
@@ -390,14 +395,13 @@ export default {
     getSqrt() {
       if (!this.isError) {
         this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, ',', '.')
+        const screenResult = new Decimal(this.$refs.screen.innerHTML)
         //исключаем выделение квадратного корня из отрицательного числа
-        if (Number(this.$refs.screen.innerHTML) < 0) {
+        if (screenResult.toNumber() < 0) {
           this.$refs.screen.innerHTML = 0;
           this.isError = true;
         } else {
-          this.$refs.screen.innerHTML = Math.sqrt(
-          Number(this.$refs.screen.innerHTML)
-          );
+          this.$refs.screen.innerHTML = screenResult.sqrt()
           this.transformResult();
           this.isMadeCalculation = true;
         }

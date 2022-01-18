@@ -3,6 +3,7 @@
     <Draggable :options="{
       handle: '.calculator__header'
     }">
+    <KeyboardInput />
       <!-- <Resizable :options="{
         startWidth: 200,
         minWidth: 150,
@@ -10,7 +11,7 @@
         minHeight: 150,
         animate: true
       }"> -->
-        <Calculator />
+        <!-- <Calculator /> -->
         <!-- <div class="test"></div>
       </Resizable> -->
     </Draggable>
@@ -18,14 +19,16 @@
 </template>
 
 <script>
-import Calculator from "@/components/Calculator";
+// import Calculator from "@/components/Calculator";
+import KeyboardInput from "@/components/KeyboardInput"
 import Draggable from "@/components/Draggable";
 // import Resizable from "./components/Resizable";
 
 export default {
   name: "App",
   components: {
-    Calculator,
+    KeyboardInput,
+    // Calculator,
     Draggable,
     // Resizable,
   },
