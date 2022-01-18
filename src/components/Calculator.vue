@@ -130,6 +130,7 @@ export default {
       operationName: "", //наименование операции
       isSecondOperand: false, //вводится ли второй операнд выражения в данный момент
       isMadeCalculation: false,
+      firstOperand: "",
       lastOperand: "", //последний используемый операнд для выражения
       lastOperation: "", //последняя совершенная операция
       isMadeWithoutSecondOperand: false,
@@ -199,7 +200,6 @@ export default {
             this.$refs.screen.innerHTML += number;
           }
         }
-        this.isMadeCalculation = false;
       }
     },
     /**
@@ -247,12 +247,15 @@ export default {
           this.operationName = this.lastOperation;
           this.isMadeWithoutSecondOperand = true
         }
-
         if (
-          this.$refs.screen.innerHTML > 0 && this.operationName == "" && !this.isMadeCalculation && this.lastOperand
+          this.$refs.screen.innerHTML !== '' && this.operationName == "" && !this.isMadeCalculation
         ) {
-          this.$refs.screen.innerHTML = this.lastOperand;
-          return
+          this.prevValue = this.$refs.screen.innerHTML
+          this.$refs.screen.innerHTML = this.firstOperand;
+          this.operationName = this.lastOperation
+          this.isMadeWithoutSecondOperand = true
+        } else {
+          this.firstOperand = new Decimal(this.prevValue);
         }
 
         //заменяем запятую на точку в значениях
@@ -508,6 +511,7 @@ export default {
       this.isSecondOperand = false;
       this.prevValue = "";
       this.operationName = "";
+      this.firstOperand = "";
       this.lastOperand = "";
       this.lastOperation = "";
       this.isError = false;
