@@ -9,10 +9,12 @@
       <div class="calculator__display">
         <div class="screen">
           <div class="screen__memory-sign" v-show="memoryValue">
-            <img src="../assets/calculator/memo.svg" />
+            <div class="sign__wrapper">
+              <img class="memory-sign__image" src="../assets/calculator/memo.svg" />
+            </div>
           </div>
           <div class="screen__error-sign" v-show="isError">
-            <img src="../assets/calculator/error.svg" />
+            <img class="error-sign__image" src="../assets/calculator/error.svg" />
           </div>
           <p class="screen__value" ref="screen"></p>
         </div>
@@ -130,16 +132,16 @@ export default {
       operationName: "", //наименование операции
       isSecondOperand: false, //вводится ли второй операнд выражения в данный момент
       isMadeCalculation: false,
-      firstOperand: "",
       lastOperand: "", //последний используемый операнд для выражения
       lastOperation: "", //последняя совершенная операция
-      isMadeWithoutSecondOperand: false,
+      isMadeWithoutSecondOperand: false, //последняя операция выполнена без указания 2 операнда
       maxValueLength: 13, //максимальная длина значения на экране калькулятора
       memoryValue: "", //значения в ячейке памяти калькулятора
       isError: false, //ошибка, сообщающая о превышении допустимого значения калькулятора
     };
   },
   computed: {
+    //максимальное значения для калькулятора
     maxValue() {
       let value = "";
 
@@ -151,6 +153,7 @@ export default {
     },
   },
   mounted() {
+    //при монтировании компонента на экране калькулятора появляется число 0
     this.$refs.screen.innerHTML = 0;
   },
   methods: {
@@ -178,15 +181,16 @@ export default {
           this.lastOperand = this.$refs.screen.innerHTML;
           this.$refs.screen.innerHTML = "";
         }
-  
+        //если уже был введен первый операнд, то активируем флаг и позволяем вводить значение второго операнда
         if (!this.isSecondOperand) {
           if (this.prevValue && this.operationName) {
             this.isSecondOperand = true;
             this.$refs.screen.innerHTML = "";
           }
         }
-  
+        //если вводится запятая
         if (number == ",") {
+          //если в значении на экране еще нет запятой
           if (!this.$refs.screen.innerHTML.includes(",")) {
             this.$refs.screen.innerHTML =
               this.$refs.screen.innerHTML == 0
@@ -194,12 +198,15 @@ export default {
                 : (this.$refs.screen.innerHTML += ",");
           }
         } else {
-          if ((this.$refs.screen.innerHTML + number).length > this.maxValueLength) {
-            this.isError = true
+          //если значение превышает допустимую длину, то показываем ошибку
+          if ((this.$refs.screen.innerHTML + number).length > this.maxValueLength - 1) {
+            return
           } else {
             this.$refs.screen.innerHTML += number;
           }
         }
+
+        this.isMadeCalculation = false;
       }
     },
     /**
@@ -222,6 +229,7 @@ export default {
       if (!this.isError) {
         this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, ',', '.')
         this.$refs.screen.innerHTML = -this.$refs.screen.innerHTML;
+        this.transformResult()
         this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, '.', ',')
       }
     },
@@ -242,20 +250,18 @@ export default {
      */
     makeCalculation() {
       if (!this.isError) {
+        //если после вычислений нажимают сразу на знак равно
         if (this.prevValue === '' && this.isMadeCalculation && this.lastOperand !== '' && this.lastOperation !== '') {
           this.prevValue = this.lastOperand
           this.operationName = this.lastOperation;
           this.isMadeWithoutSecondOperand = true
         }
+        //если нажимают на равно без указания операции, то возвращаем последний операнд
         if (
-          this.$refs.screen.innerHTML !== '' && this.operationName == "" && !this.isMadeCalculation
+          this.$refs.screen.innerHTML > 0 && this.operationName == "" && !this.isMadeCalculation && this.lastOperand
         ) {
-          this.prevValue = this.$refs.screen.innerHTML
-          this.$refs.screen.innerHTML = this.firstOperand;
-          this.operationName = this.lastOperation
-          this.isMadeWithoutSecondOperand = true
-        } else {
-          this.firstOperand = new Decimal(this.prevValue);
+          this.$refs.screen.innerHTML = this.lastOperand;
+          return
         }
 
         //заменяем запятую на точку в значениях
@@ -310,6 +316,7 @@ export default {
             this.lastOperation = "div";
   
             if (this.isMadeWithoutSecondOperand) {
+              //исключаем делеие на 0
               if (this.prevValue == '0') {
                 this.$refs.screen.innerHTML = 0;
                 this.isError = true;
@@ -317,6 +324,7 @@ export default {
                 this.$refs.screen.innerHTML = screenResult.div(this.prevValue)
               }
             } else {
+              //исключаем делеие на 0
               if (this.$refs.screen.innerHTML == '0') {
                 this.$refs.screen.innerHTML = 0;
                 this.isError = true;
@@ -357,14 +365,15 @@ export default {
      * @returns void
      */
     transformResult() {
+      //если получившийся результат больше допустимого значения, то показываем ошибку
       if (Number(this.$refs.screen.innerHTML) > this.maxValue) {
         this.$refs.screen.innerHTML = 0;
         this.isError = true;
       } else {
         const result = this.$refs.screen.innerHTML.split("");
+        //записываем в переменную количество знаков с конца значения, которое нужно удалить, чтобы значение поместилось на экране
         const numbersCountToDelete =
           this.$refs.screen.innerHTML.length - this.maxValueLength;
-
         if (numbersCountToDelete > 0) {
           result.splice(
             result.length - 1 - numbersCountToDelete,
@@ -381,7 +390,7 @@ export default {
     getSqrt() {
       if (!this.isError) {
         this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, ',', '.')
-  
+        //исключаем выделение квадратного корня из отрицательного числа
         if (Number(this.$refs.screen.innerHTML) < 0) {
           this.$refs.screen.innerHTML = 0;
           this.isError = true;
@@ -511,7 +520,6 @@ export default {
       this.isSecondOperand = false;
       this.prevValue = "";
       this.operationName = "";
-      this.firstOperand = "";
       this.lastOperand = "";
       this.lastOperation = "";
       this.isError = false;
@@ -582,6 +590,7 @@ export default {
   font-size: 40px;
   line-height: 36px;
   position: relative;
+  color: black
 }
 .screen__value {
   margin: 14px 7px 15px 8px;
@@ -622,7 +631,7 @@ export default {
   height: 28px;
   font-size: 15px;
   position: absolute;
-  bottom: 0px;
+  bottom: 3px;
   left: 5px;
 }
 .screen__error-sign {
@@ -631,7 +640,23 @@ export default {
   height: 28px;
   font-size: 15px;
   position: absolute;
-  top: 0px;
+  top: 3px;
+  left: 5px;
+}
+.sign__wrapper {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.memory-sign__image {
+  position: absolute;
+  bottom: 0px;
   left: 0px;
+}
+.error-sign__image {
+  position: absolute;
+  left: 0px;
+  top: 0px;
 }
 </style>
