@@ -365,7 +365,7 @@ export default {
      */
     transformResult() {
       //если получившийся результат больше допустимого значения, то показываем ошибку
-      if (Number(this.$refs.screen.innerHTML) > this.maxValue) {
+      if (Number(this.$refs.screen.innerHTML) > this.maxValue || String(this.$refs.screen.innerHTML).includes('e')) {
         this.$refs.screen.innerHTML = 0;
         this.isError = true;
       } else {
