@@ -1,36 +1,43 @@
 <template>
   <div id="app">
-    <Draggable :options="{
-      handle: '.calculator__header'
-    }">
-    <KeyboardInput />
-      <!-- <Resizable :options="{
-        startWidth: 200,
-        minWidth: 150,
-        startHeight: 200,
-        minHeight: 150,
-        animate: true
-      }"> -->
-        <!-- <Calculator /> -->
-        <!-- <div class="test"></div>
-      </Resizable> -->
+    <!-- <KeyboardInput :maxlength="10"/> -->
+    <Draggable
+      :options="{
+        handle: '.calculator__header',
+      }"
+    >
+      <Calculator />
+    </Draggable>
+    
+    <Draggable>
+      <Resizable
+        :options="{
+          startWidth: 200,
+          minWidth: 150,
+          startHeight: 200,
+          minHeight: 150,
+          animate: true,
+        }"
+      >
+        <div class="test"></div>
+      </Resizable>
     </Draggable>
   </div>
 </template>
 
 <script>
-// import Calculator from "@/components/Calculator";
-import KeyboardInput from "@/components/KeyboardInput"
+import Calculator from "@/components/Calculator";
+// import KeyboardInput from "@/components/KeyboardInput"
 import Draggable from "@/components/Draggable";
-// import Resizable from "./components/Resizable";
+import Resizable from "./components/Resizable";
 
 export default {
   name: "App",
   components: {
-    KeyboardInput,
-    // Calculator,
+    // KeyboardInput,
+    Calculator,
     Draggable,
-    // Resizable,
+    Resizable,
   },
 };
 </script>

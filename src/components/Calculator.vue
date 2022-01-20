@@ -214,12 +214,11 @@ export default {
      * @returns void
      */
     deleteNumber() {
-      if (!this.isError) {
         let result = this.$refs.screen.innerHTML.split("");
         result.splice(result.length - 1, 1);
+        console.log(result);
   
         this.$refs.screen.innerHTML = result.length == 0 ? 0 : result.join("");
-      }
     },
     /**
      * изменение знака значения на дисплее калькулятора

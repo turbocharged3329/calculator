@@ -1,99 +1,83 @@
 <template>
   <div class="keyboard-input">
-    <input class="input__field" v-model="value" />
-    <div 
-    class="input__keyboard"
-    :class="{'keyboard-vertical': isVertical, 'keyboard-horizontal' : !isVertical}"
-    >
-      <div class="keyboard__wrapper">
-        <div class="keyboard__header">
-          <button class="keyboard__header-btn header__orientation-btn" @click="changeKeyboardOrientation">
-            <img
-              :src="require(`../assets/keyboard/${!isVertical ? 'vertical' : 'horizontal'}.svg`)"
-              class="orientation-btn__image"
-            />
-          </button>
-          <button class="keyboard__header-btn header__hide-btn">
-            <img src="../assets/keyboard/close.png" class="close-btn__image" />
-          </button>
-        </div>
-        <div class="keyboard__keys" :class="{'keyboard__keys-vertical': isVertical, 'keyboard__keys-horizontal' : !isVertical}">
-          <div class="keyboard__btn" :style="{'order' : isVertical ? '-15' : 'initial'}">
-            <img src="../assets/keyboard/number7.svg" />
-          </div>
-          <div class="keyboard__btn" :style="{'order' : isVertical ? '-14' : 'initial'}">
-            <img src="../assets/keyboard/number8.svg" />
-          </div>
-          <div class="keyboard__btn" :style="{'order' : isVertical ? '-13' : 'initial'}">
-            <img src="../assets/keyboard/number9.svg" />
-          </div>
-          <div class="keyboard__btn" :style="{'order' : isVertical ? '-5' : 'initial'}">
-            <img src="../assets/keyboard/+_-.svg" />
-          </div>
-          <div class="keyboard__btn" :style="{'order' : isVertical ? '-3' : 'initial'}">
-            <img src="../assets/keyboard/del.svg" />
-          </div>
-          <div class="keyboard__btn" :style="{'order' : isVertical ? '-12' : 'initial'}">
-            <img src="../assets/keyboard/number4.svg"/>
-          </div>
-          <div class="keyboard__btn" :style="{'order' : isVertical ? '-11' : 'initial'}">
-            <img src="../assets/keyboard/number5.svg"/>
-          </div>
-          <div class="keyboard__btn" :style="{'order' : isVertical ? '-10' : 'initial'}">
-            <img src="../assets/keyboard/number6.svg" />
-          </div>
-          <div class="keyboard__btn" :style="{'order' : isVertical ? '-4' : 'initial'}">
-            <img src="../assets/keyboard/dot.svg" />
-          </div>
-          <div class="keyboard__btn" :style="{'order' : isVertical ? '-2' : 'initial'}">
-            <img src="../assets/keyboard/enter.svg" />
-          </div>
-          <div class="keyboard__btn" :style="{'order' : isVertical ? '-9' : 'initial'}">
-            <img src="../assets/keyboard/number1.svg" />
-          </div>
-          <div class="keyboard__btn" :style="{'order' : isVertical ? '-8' : 'initial'}">
-            <img src="../assets/keyboard/number2.svg" />
-          </div>
-          <div class="keyboard__btn" :style="{'order' : isVertical ? '-7' : 'initial'}">
-            <img src="../assets/keyboard/number3.svg" />
-          </div>
-          <div class="keyboard__btn" :style="{'order' : isVertical ? '-6' : 'initial'}">
-            <img src="../assets/keyboard/number0.svg" />
-          </div>
-          <div class="keyboard__btn" :style="{'order' : isVertical ? '-1' : 'initial'}">
-            <img src="../assets/keyboard/ac.svg" />
-          </div>
-        </div>
-      </div>
-    </div>
+    <input 
+    type="text" 
+    class="input__field" 
+    v-model="currentValue" 
+    :maxlength="maxlength" 
+    @input="inputValue($event)" 
+    @focus="isShownKeyboard = true"
+    @blur="showInput($event)"
+    />
+    <Keyboard 
+    v-model="currentValue" 
+    :maxlength="maxlength" 
+    :isShown="isShownKeyboard" 
+    :position="keyboardPosition"
+    @hide="isShownKeyboard = $event"/>
   </div>
 </template>
 
 <script>
+import Keyboard from "../components/Keyboard"
 export default {
   name: "KeyboardInput",
-  components: {},
-  props: {},
+  components: {
+    Keyboard
+  },
+  props: {
+    maxlength: {
+      type: Number,
+      default: 10
+    }
+  },
   data() {
     return {
-      value: "",
+      currentValue: "",
       isVertical: true,
+      allowedSymbols: ['1','2','3','4','5','6','7','8','9','0', '-', ','],
+      isShownKeyboard: false,
+      keyboardPosition: {},
     };
   },
   methods: {
-    changeKeyboardOrientation() {
-      this.isVertical = !this.isVertical
-    }
-  },
+    showInput(e) {
+      const coords = e.target.getBoundingClientRect();
+      // eslint-disable-next-line no-unused-vars
+      const documentWidth = document.documentElement.clientWidth 
+      const documentHeight = document.documentElement.clientHeight 
+
+      console.log(coords);
+
+      if (documentHeight - coords.bottom > 335) {
+        this.keyboardPosition = {
+          top: `${coords.height + 5}px`,
+          left: '0px',
+        }
+      } else if (documentWidth - coords.right) {
+        console.log(123);
+      }
+
+    },
+    inputValue(e) {
+      let value = e.target.value.split('')
+      value = value.filter(elem => this.allowedSymbols.includes(elem))
+      this.currentValue = value.join('')
+    },
+  }
 };
 </script>
 
 <style lang="css" scoped>
 .keyboard-input {
-  display: block;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
   width: 500px;
   height: 500px;
   background: dimgray;
+  position: relative;
 }
 .input__keyboard {
   background: #00838f;
