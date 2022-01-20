@@ -5,37 +5,16 @@
 </template>
 
 <script>
+import jQuerryWidget from "@/mixins/jQuerryWidget";
+
 export default {
   name: "Draggable",
   components: {},
-  props: {
-    //настройки компонента для перемещения
-    options: {
-      type: Object,
-      default() {
-        return {};
-      },
-    },
-  },
-  computed: {
-    //объект настроек, содержащий рефакторинг функций jQuerry UI под Vue.JS
-    widgetOptions() {
-      //копия оъекта настроек их входных данных
-      const options = { ...this.options}
-      //имена функций, для которых нужно провести рефакторинг
-      const functionsNames = ['create', 'drag', 'start', 'stop']
-
-      functionsNames.forEach(name => {
-        options[name] = (event, ui) => {
-          if (this.options[name]) {
-            this.options[name]();
-          }
-          this.$emit(name, { event, ui });
-        }
-      })
-
-      return options 
-    },
+  mixins: [ jQuerryWidget ],
+  data() {
+    return {
+      functionsNames: ['create', 'drag', 'start', 'stop'], //имена функций, для которых возможно сделать переопределение
+    }
   },
 };
 </script>

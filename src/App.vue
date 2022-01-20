@@ -1,44 +1,12 @@
 <template>
   <div id="app">
-    <!-- <KeyboardInput :maxlength="10"/> -->
-    <Draggable
-      :options="{
-        handle: '.calculator__header',
-      }"
-    >
-      <Calculator />
-    </Draggable>
-    
-    <Draggable>
-      <Resizable
-        :options="{
-          startWidth: 200,
-          minWidth: 150,
-          startHeight: 200,
-          minHeight: 150,
-          animate: true,
-        }"
-      >
-        <div class="test"></div>
-      </Resizable>
-    </Draggable>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Calculator from "@/components/Calculator";
-// import KeyboardInput from "@/components/KeyboardInput"
-import Draggable from "@/components/Draggable";
-import Resizable from "./components/Resizable";
-
 export default {
   name: "App",
-  components: {
-    // KeyboardInput,
-    Calculator,
-    Draggable,
-    Resizable,
-  },
 };
 </script>
 
@@ -52,12 +20,5 @@ export default {
   margin-top: 60px;
   width: 100%;
   height: 100vh;
-}
-.test {
-  display: block;
-  border: 1px solid black;
-  background: #11ddaa;
-  width: 100%;
-  height: 100%;
 }
 </style>

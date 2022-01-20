@@ -3,65 +3,65 @@
     class="input__keyboard"
     :class="{'keyboard-vertical': isVertical, 'keyboard-horizontal' : !isVertical}"
     :style="position"
-    v-show="isShown"
+    v-if="shown"
     >
       <div class="keyboard__wrapper">
         <div class="keyboard__header">
-          <button class="keyboard__header-btn header__orientation-btn" @click="changeKeyboardOrientation">
+          <button class="keyboard__header-btn header__orientation-btn" @click.prevent.stop="changeKeyboardOrientation">
             <img
-              :src="require(`../assets/keyboard/${!isVertical ? 'vertical' : 'horizontal'}.svg`)"
+              :src="require(`@/assets/img/keyboard/${!isVertical ? 'vertical' : 'horizontal'}.svg`)"
               class="orientation-btn__image"
             />
           </button>
-          <button @click="hideKeyboard" class="keyboard__header-btn header__hide-btn">
-            <img src="../assets/keyboard/close.png" class="close-btn__image" />
+          <button @click.prevent.stop="hideKeyboard" class="keyboard__header-btn header__hide-btn">
+            <img :src="require('@/assets/img/keyboard/close.png')" class="close-btn__image" />
           </button>
         </div>
         <div class="keyboard__keys" :class="{'keyboard__keys-vertical': isVertical, 'keyboard__keys-horizontal' : !isVertical}">
-          <div class="keyboard__btn"  @click="addNumber('7')" :style="{'order' : isVertical ? '-15' : 'initial'}">
-            <img class="btn__image" src="../assets/keyboard/number7.svg" />
+          <div class="keyboard__btn"  @click.prevent.stop="addNumber('7')" :style="{'order' : isVertical ? '-15' : 'initial'}">
+            <img class="btn__image" :src="require('@/assets/img/keyboard/number7.svg')" />
           </div>
-          <div class="keyboard__btn" @click="addNumber('8')" :style="{'order' : isVertical ? '-14' : 'initial'}">
-            <img class="btn__image" src="../assets/keyboard/number8.svg" />
+          <div class="keyboard__btn" @click.prevent.stop="addNumber('8')" :style="{'order' : isVertical ? '-14' : 'initial'}">
+            <img class="btn__image" :src="require('@/assets/img/keyboard/number8.svg')" />
           </div>
-          <div class="keyboard__btn"  @click="addNumber('9')" :style="{'order' : isVertical ? '-13' : 'initial'}">
-            <img class="btn__image" src="../assets/keyboard/number9.svg" />
+          <div class="keyboard__btn"  @click.prevent.stop="addNumber('9')" :style="{'order' : isVertical ? '-13' : 'initial'}">
+            <img class="btn__image" :src="require('@/assets/img/keyboard/number9.svg')" />
           </div>
-          <div class="keyboard__btn" @click="changeSign" :style="{'order' : isVertical ? '-5' : 'initial'}">
-            <img class="btn__image" src="../assets/keyboard/+_-.svg" />
+          <div class="keyboard__btn" @click.prevent.stop="changeSign" :style="{'order' : isVertical ? '-5' : 'initial'}">
+            <img class="btn__image" :src="require('@/assets/img/keyboard/+_-.svg')" />
           </div>
-          <div class="keyboard__btn" @click="deleteNumber" :style="{'order' : isVertical ? '-3' : 'initial'}">
-            <img class="btn__image" src="../assets/keyboard/del.svg" />
+          <div class="keyboard__btn" @click.prevent.stop="deleteNumber" :style="{'order' : isVertical ? '-3' : 'initial'}">
+            <img class="btn__image" :src="require('@/assets/img/keyboard/del.svg')" />
           </div>
-          <div class="keyboard__btn" @click="addNumber('4')" :style="{'order' : isVertical ? '-12' : 'initial'}">
-            <img class="btn__image" src="../assets/keyboard/number4.svg"/>
+          <div class="keyboard__btn" @click.prevent.stop="addNumber('4')" :style="{'order' : isVertical ? '-12' : 'initial'}">
+            <img class="btn__image" :src="require('@/assets/img/keyboard/number4.svg')"/>
           </div>
-          <div class="keyboard__btn"  @click="addNumber('5')" :style="{'order' : isVertical ? '-11' : 'initial'}">
-            <img class="btn__image" src="../assets/keyboard/number5.svg"/>
+          <div class="keyboard__btn"  @click.prevent.stop="addNumber('5')" :style="{'order' : isVertical ? '-11' : 'initial'}">
+            <img class="btn__image" :src="require('@/assets/img/keyboard/number5.svg')"/>
           </div>
-          <div class="keyboard__btn" @click="addNumber('6')" :style="{'order' : isVertical ? '-10' : 'initial'}">
-            <img class="btn__image" src="../assets/keyboard/number6.svg" />
+          <div class="keyboard__btn" @click.prevent.stop="addNumber('6')" :style="{'order' : isVertical ? '-10' : 'initial'}">
+            <img class="btn__image" :src="require('@/assets/img/keyboard/number6.svg')" />
           </div>
-          <div class="keyboard__btn" @click="addNumber(',')" :style="{'order' : isVertical ? '-4' : 'initial'}">
-            <img class="btn__image" src="../assets/keyboard/dot.svg" />
+          <div class="keyboard__btn" @click.prevent.stop="addNumber(',')" :style="{'order' : isVertical ? '-4' : 'initial'}">
+            <img class="btn__image" :src="require('@/assets/img/keyboard/dot.svg')" />
           </div>
           <div class="keyboard__btn" :style="{'order' : isVertical ? '-2' : 'initial'}">
-            <img class="btn__image" src="../assets/keyboard/enter.svg" />
+            <img class="btn__image" :src="require('@/assets/img/keyboard/enter.svg')" />
           </div>
-          <div class="keyboard__btn" @click="addNumber('1')" :style="{'order' : isVertical ? '-9' : 'initial'}">
-            <img class="btn__image" src="../assets/keyboard/number1.svg" />
+          <div class="keyboard__btn" @click.prevent.stop="addNumber('1')" :style="{'order' : isVertical ? '-9' : 'initial'}">
+            <img class="btn__image" :src="require('@/assets/img/keyboard/number1.svg')" />
           </div>
-          <div class="keyboard__btn" @click="addNumber('2')" :style="{'order' : isVertical ? '-8' : 'initial'}">
-            <img class="btn__image" src="../assets/keyboard/number2.svg" />
+          <div class="keyboard__btn" @click.prevent.stop="addNumber('2')" :style="{'order' : isVertical ? '-8' : 'initial'}">
+            <img class="btn__image" :src="require('@/assets/img/keyboard/number2.svg')" />
           </div>
-          <div class="keyboard__btn" @click="addNumber('3')" :style="{'order' : isVertical ? '-7' : 'initial'}">
-            <img class="btn__image" src="../assets/keyboard/number3.svg" />
+          <div class="keyboard__btn" @click.prevent.stop="addNumber('3')" :style="{'order' : isVertical ? '-7' : 'initial'}">
+            <img class="btn__image" :src="require('@/assets/img/keyboard/number3.svg')" />
           </div>
-          <div class="keyboard__btn" @click="addNumber('0')" :style="{'order' : isVertical ? '-6' : 'initial'}">
-            <img class="btn__image" src="../assets/keyboard/number0.svg" />
+          <div class="keyboard__btn" @click.prevent.stop="addNumber('0')" :style="{'order' : isVertical ? '-6' : 'initial'}">
+            <img class="btn__image" :src="require('@/assets/img/keyboard/number0.svg')" />
           </div>
-          <div class="keyboard__btn" @click="resetState" :style="{'order' : isVertical ? '-1' : 'initial'}">
-            <img class="btn__image" src="../assets/keyboard/ac.svg" />
+          <div class="keyboard__btn" @click.prevent.stop="resetState" :style="{'order' : isVertical ? '-1' : 'initial'}">
+            <img class="btn__image" :src="require('@/assets/img/keyboard/ac.svg')" />
           </div>
         </div>
       </div>
@@ -71,7 +71,6 @@
 <script>
 export default {
   name: 'Keyboard',
-  components: {},
   emits: ['input'],
   props: {
     value : {
@@ -81,7 +80,7 @@ export default {
       type: Number,
       default: 10,
     },
-    isShown: {
+    shown: {
       type: Boolean,
       default: true,
     },

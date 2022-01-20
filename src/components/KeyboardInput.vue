@@ -5,14 +5,14 @@
     class="input__field" 
     v-model="currentValue" 
     :maxlength="maxlength" 
-    @input="inputValue($event)" 
-    @focus="isShownKeyboard = true"
-    @blur="showInput($event)"
+    @input.prevent.stop="inputValue($event)" 
+    @focus.prevent.stop="isShownKeyboard = true"
+    @blur.prevent.stop="showInput($event)"
     />
     <Keyboard 
     v-model="currentValue" 
     :maxlength="maxlength" 
-    :isShown="isShownKeyboard" 
+    :shown="isShownKeyboard" 
     :position="keyboardPosition"
     @hide="isShownKeyboard = $event"/>
   </div>
@@ -45,6 +45,7 @@ export default {
       const coords = e.target.getBoundingClientRect();
       // eslint-disable-next-line no-unused-vars
       const documentWidth = document.documentElement.clientWidth 
+      // eslint-disable-next-line no-unused-vars
       const documentHeight = document.documentElement.clientHeight 
 
       console.log(coords);
@@ -54,8 +55,21 @@ export default {
           top: `${coords.height + 5}px`,
           left: '0px',
         }
-      } else if (documentWidth - coords.right) {
-        console.log(123);
+      } else if ((documentWidth - coords.right > 304) && (documentHeight - coords.bottom - coords.height > 335)) {
+        this.keyboardPosition = {
+          top: '0px',
+          left: `${coords.width + 5}px`,
+        }
+      } else if (coords.top > 335) {
+        this.keyboardPosition = {
+          top: `${0 - 335 - 5}px`,
+          left: '0px',
+        }
+      } else if (coords.left > 304) {
+        this.keyboardPosition = {
+          top: '0px',
+          left: `-${304 + 5}px`,
+        }
       }
 
     },
@@ -71,13 +85,15 @@ export default {
 <style lang="css" scoped>
 .keyboard-input {
   display: flex;
-  flex-direction: row;
+  flex-flow: row nowrap;
   justify-content: flex-start;
   align-items: flex-start;
   width: 500px;
   height: 500px;
   background: dimgray;
   position: relative;
+  top: 500px;
+  left: 400px;
 }
 .input__keyboard {
   background: #00838f;
@@ -95,6 +111,9 @@ export default {
 .keyboard__wrapper {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
   width: 100%;
   height: 100%;
 }
@@ -109,6 +128,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-wrap: nowrap;
   width: 30px;
   height: 30px;
   border: none;
@@ -117,19 +137,21 @@ export default {
 .header__orientation-btn {
   position: absolute;
   left: 0px;
+  z-index: 2;
   border-radius: 10px 0px 0px 0px;
 }
 .header__hide-btn {
-  border-radius: 0px 10px 0px 0px;
   position: absolute;
+  z-index: 3;
   right: 0px;
+  border-radius: 0px 10px 0px 0px;
 }
 .keyboard__header-btn:hover {
   background: #00727e;
 }
 .keyboard__keys {
   display: flex;
-  flex-wrap: wrap;
+  flex-flow: row nowrap;
   justify-content: center;
   align-items: center;
   padding: 2px 0;
@@ -143,6 +165,7 @@ export default {
 }
 .keyboard__btn {
   display: flex;
+  flex-flow: row nowrap;
   justify-content: center;
   align-items: center;
   width: 60px;

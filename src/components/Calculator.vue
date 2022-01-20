@@ -1,114 +1,114 @@
 <template>
-  <div class="calculator" v-show="!isHidden">
+  <div class="calculator" v-if="!hidden">
     <div class="calculator__wrapper">
       <div class="calculator__header">
-        <button class="calculator__hide-btn" @click="hideCalc">
-          <img src="../assets/calculator/close.png" class="close-btn__image" />
+        <button class="calculator__hide-btn" @click.prevent.stop="hideCalc">
+          <img :src="require('@/assets/img/calculator/close.png')" class="close-btn__image" />
         </button>
       </div>
       <div class="calculator__display">
         <div class="screen">
           <div class="screen__memory-sign" v-show="memoryValue">
             <div class="sign__wrapper">
-              <img class="memory-sign__image" src="../assets/calculator/memo.svg" />
+              <img :src="require('@/assets/img/calculator/memo.svg')" class="memory-sign__image" />
             </div>
           </div>
           <div class="screen__error-sign" v-show="isError">
-            <img class="error-sign__image" src="../assets/calculator/error.svg" />
+            <img :src="require('@/assets/img/calculator/error.svg')" class="error-sign__image" />
           </div>
           <p class="screen__value" ref="screen"></p>
         </div>
       </div>
       <div class="calculator__keyboard">
-        <div class="keyboard__btn" @click="memoryClear">
-          <img src="../assets/calculator/mc.svg" />
+        <div class="keyboard__btn" @click.prevent.stop="memoryClear">
+          <img :src="require('@/assets/img/calculator/mc.svg')" />
         </div>
-        <div class="keyboard__btn" @click="memoryRecovery">
-          <img src="../assets/calculator/mr.svg" />
+        <div class="keyboard__btn" @click.prevent.stop="memoryRecovery">
+          <img :src="require('@/assets/img/calculator/mr.svg')" />
         </div>
-        <div class="keyboard__btn" @click="memorySave">
-          <img src="../assets/calculator/ms.svg" />
+        <div class="keyboard__btn" @click.prevent.stop="memorySave">
+          <img :src="require('@/assets/img/calculator/ms.svg')" />
         </div>
-        <div class="keyboard__btn" @click="increaseMemoryValue">
-          <img src="../assets/calculator/mincr.svg" />
+        <div class="keyboard__btn" @click.prevent.stop="increaseMemoryValue">
+          <img :src="require('@/assets/img/calculator/mincr.svg')" />
         </div>
-        <div class="keyboard__btn" @click="decreaseMemoryValue">
-          <img src="../assets/calculator/mdecr.svg" />
+        <div class="keyboard__btn" @click.prevent.stop="decreaseMemoryValue">
+          <img :src="require('@/assets/img/calculator/mdecr.svg')" />
         </div>
-        <div class="keyboard__btn" @click="deleteNumber">
-          <img src="../assets/calculator/del.svg" />
+        <div class="keyboard__btn" @click.prevent.stop="deleteNumber">
+          <img :src="require('@/assets/img/calculator/del.svg')" />
         </div>
-        <div class="keyboard__btn" @click="resetSecondOperand">
-          <img src="../assets/calculator/ce.svg" />
+        <div class="keyboard__btn" @click.prevent.stop="resetSecondOperand">
+          <img :src="require('@/assets/img/calculator/ce.svg')" />
         </div>
-        <div class="keyboard__btn" @click="resetCalcStateToDefault">
-          <img src="../assets/calculator/c.svg" />
+        <div class="keyboard__btn" @click.prevent.stop="resetCalcStateToDefault">
+          <img :src="require('@/assets/img/calculator/c.svg')" />
         </div>
-        <div class="keyboard__btn" @click="setOperation('pow')">
-          <img src="../assets/calculator/x_y.svg" />
+        <div class="keyboard__btn" @click.prevent.stop="setOperation('pow')">
+          <img :src="require('@/assets/img/calculator/x_y.svg')" />
         </div>
-        <div class="keyboard__btn" @click="getSqrt">
-          <img src="../assets/calculator/sqrt.svg" />
+        <div class="keyboard__btn" @click.prevent.stop="getSqrt">
+          <img :src="require('@/assets/img/calculator/sqrt.svg')" />
         </div>
-        <div class="keyboard__btn keyboard__btn-number" @click="addNumber(7)">
-          <img src="../assets/calculator/number7.svg" />
+        <div class="keyboard__btn keyboard__btn-number" @click.prevent.stop="addNumber(7)">
+          <img :src="require('@/assets/img/calculator/number7.svg')" />
         </div>
-        <div class="keyboard__btn keyboard__btn-number" @click="addNumber(8)">
-          <img src="../assets/calculator/number8.svg" />
+        <div class="keyboard__btn keyboard__btn-number" @click.prevent.stop="addNumber(8)">
+          <img :src="require('@/assets/img/calculator/number8.svg')" />
         </div>
-        <div class="keyboard__btn keyboard__btn-number" @click="addNumber(9)">
-          <img src="../assets/calculator/number9.svg" />
+        <div class="keyboard__btn keyboard__btn-number" @click.prevent.stop="addNumber(9)">
+          <img :src="require('@/assets/img/calculator/number9.svg')" />
         </div>
-        <div class="keyboard__btn" @click="setOperation('div')">
-          <img src="../assets/calculator/slash.svg" />
+        <div class="keyboard__btn" @click.prevent.stop="setOperation('div')">
+          <img :src="require('@/assets/img/calculator/slash.svg')" />
         </div>
-        <div class="keyboard__btn" @click="getInverseProportionality">
-          <img src="../assets/calculator/1-x.svg" />
+        <div class="keyboard__btn" @click.prevent.stop="getInverseProportionality">
+          <img :src="require('@/assets/img/calculator/1-x.svg')" />
         </div>
-        <div class="keyboard__btn keyboard__btn-number" @click="addNumber(4)">
-          <img src="../assets/calculator/number4.svg" />
+        <div class="keyboard__btn keyboard__btn-number" @click.prevent.stop="addNumber(4)">
+          <img :src="require('@/assets/img/calculator/number4.svg')" />
         </div>
-        <div class="keyboard__btn keyboard__btn-number" @click="addNumber(5)">
-          <img src="../assets/calculator/number5.svg" />
+        <div class="keyboard__btn keyboard__btn-number" @click.prevent.stop="addNumber(5)">
+          <img :src="require('@/assets/img/calculator/number5.svg')" />
         </div>
-        <div class="keyboard__btn keyboard__btn-number" @click="addNumber(6)">
-          <img src="../assets/calculator/number6.svg" />
+        <div class="keyboard__btn keyboard__btn-number" @click.prevent.stop="addNumber(6)">
+          <img :src="require('@/assets/img/calculator/number6.svg')" />
         </div>
-        <div class="keyboard__btn" @click="setOperation('mult')">
-          <img src="../assets/calculator/multiply.svg" />
+        <div class="keyboard__btn" @click.prevent.stop="setOperation('mult')">
+          <img :src="require('@/assets/img/calculator/multiply.svg')" />
         </div>
-        <div class="keyboard__btn" @click="getSinOrCosValue('sin')">
-          <img src="../assets/calculator/sin.svg" />
+        <div class="keyboard__btn" @click.prevent.stop="getSinOrCosValue('sin')">
+          <img :src="require('@/assets/img/calculator/sin.svg')" />
         </div>
-        <div class="keyboard__btn keyboard__btn-number" @click="addNumber(1)">
-          <img src="../assets/calculator/number1.svg" />
+        <div class="keyboard__btn keyboard__btn-number" @click.prevent.stop="addNumber(1)">
+          <img :src="require('@/assets/img/calculator/number1.svg')" />
         </div>
-        <div class="keyboard__btn keyboard__btn-number" @click="addNumber(2)">
-          <img src="../assets/calculator/number2.svg" />
+        <div class="keyboard__btn keyboard__btn-number" @click.prevent.stop="addNumber(2)">
+          <img :src="require('@/assets/img/calculator/number2.svg')" />
         </div>
-        <div class="keyboard__btn keyboard__btn-number" @click="addNumber(3)">
-          <img src="../assets/calculator/number3.svg" />
+        <div class="keyboard__btn keyboard__btn-number" @click.prevent.stop="addNumber(3)">
+          <img :src="require('@/assets/img/calculator/number3.svg')" />
         </div>
-        <div class="keyboard__btn" @click="setOperation('subst')">
-          <img src="../assets/calculator/minus.svg" />
+        <div class="keyboard__btn" @click.prevent.stop="setOperation('subst')">
+          <img :src="require('@/assets/img/calculator/minus.svg')" />
         </div>
-        <div class="keyboard__btn" @click="getSinOrCosValue('cos')">
-          <img src="../assets/calculator/cos.svg" />
+        <div class="keyboard__btn" @click.prevent.stop="getSinOrCosValue('cos')">
+          <img :src="require('@/assets/img/calculator/cos.svg')" />
         </div>
-        <div class="keyboard__btn keyboard__btn-number keyboard__btn-left-bottom-rounded" @click="changeSign">
-          <img src="../assets/calculator/+_-.svg" />
+        <div class="keyboard__btn keyboard__btn-number keyboard__btn-left-bottom-rounded" @click.prevent.stop="changeSign">
+          <img :src="require('@/assets/img/calculator/+_-.svg')" />
         </div>
-        <div class="keyboard__btn keyboard__btn-number" @click="addNumber(0)">
-          <img src="../assets/calculator/number0.svg" />
+        <div class="keyboard__btn keyboard__btn-number" @click.prevent.stop="addNumber(0)">
+          <img :src="require('@/assets/img/calculator/number0.svg')" />
         </div>
-        <div class="keyboard__btn keyboard__btn-number" @click="addNumber(',')">
-          <img src="../assets/calculator/dot.svg" />
+        <div class="keyboard__btn keyboard__btn-number" @click.prevent.stop="addNumber(',')">
+          <img :src="require('@/assets/img/calculator/dot.svg')" />
         </div>
-        <div class="keyboard__btn" @click="setOperation('sum')">
-          <img src="../assets/calculator/plus.svg" />
+        <div class="keyboard__btn" @click.prevent.stop="setOperation('sum')">
+          <img :src="require('@/assets/img/calculator/plus.svg')" />
         </div>
-        <div class="keyboard__btn keyboard__btn-right-bottom-rounded" @click="makeCalculation">
-          <img src="../assets/calculator/equal.svg" />
+        <div class="keyboard__btn keyboard__btn-right-bottom-rounded" @click.prevent.stop="makeCalculation">
+          <img :src="require('@/assets/img/calculator/equal.svg')" />
         </div>
       </div>
     </div>
@@ -119,9 +119,8 @@
 import {Decimal} from 'decimal.js';
 export default {
   name: "Calculator",
-  components: {},
   props: {
-    isHidden: {
+    hidden: {
       type: Boolean,
       default: false,
     },
@@ -216,9 +215,8 @@ export default {
     deleteNumber() {
         let result = this.$refs.screen.innerHTML.split("");
         result.splice(result.length - 1, 1);
-        console.log(result);
   
-        this.$refs.screen.innerHTML = result.length == 0 ? 0 : result.join("");
+        this.$refs.screen.innerHTML = result.length == 0 || result == '-' ? 0 : result.join("");
     },
     /**
      * изменение знака значения на дисплее калькулятора
@@ -226,10 +224,10 @@ export default {
      */
     changeSign() {
       if (!this.isError) {
-        this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, ',', '.')
+        this.$refs.screen.innerHTML = String(this.$refs.screen.innerHTML).replace(',', '.')
         this.$refs.screen.innerHTML = -this.$refs.screen.innerHTML;
         this.transformResult()
-        this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, '.', ',')
+        this.$refs.screen.innerHTML = String(this.$refs.screen.innerHTML).replace('.', ',')
       }
     },
     /**
@@ -240,7 +238,7 @@ export default {
     setOperation(name) {
       if (!this.isError) {
         this.operationName = name;
-        this.prevValue = this.stringReplace(this.$refs.screen.innerHTML, ',', '.');
+        this.prevValue = String(this.$refs.screen.innerHTML).replace(',', '.');
       }
     },
     /**
@@ -264,8 +262,8 @@ export default {
         }
 
         //заменяем запятую на точку в значениях
-        this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, ',', '.')
-        this.prevValue = this.stringReplace(this.prevValue, ',', '.')
+        this.$refs.screen.innerHTML = String(this.$refs.screen.innerHTML).replace(',', '.');
+        this.prevValue = String(this.prevValue).replace(',', '.');
   
         this.$refs.screen.innerHTML = new Decimal(this.$refs.screen.innerHTML)
         const screenResult = new Decimal(this.$refs.screen.innerHTML)
@@ -356,7 +354,7 @@ export default {
         this.operationName = "";
         this.transformResult();
         //заменяем точку на запятую в получившемся значении
-        this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, '.', ',')
+        this.$refs.screen.innerHTML = String(this.$refs.screen.innerHTML).replace('.', ',');
       }
     },
     /**
@@ -393,7 +391,7 @@ export default {
      */
     getSqrt() {
       if (!this.isError) {
-        this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, ',', '.')
+        this.$refs.screen.innerHTML = String(this.$refs.screen.innerHTML).replace(',', '.');
         const screenResult = new Decimal(this.$refs.screen.innerHTML)
         //исключаем выделение квадратного корня из отрицательного числа
         if (screenResult.toNumber() < 0) {
@@ -405,7 +403,7 @@ export default {
           this.isMadeCalculation = true;
         }
   
-        this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, '.', ',')
+        this.$refs.screen.innerHTML = String(this.$refs.screen.innerHTML).replace('.', ',');
       }
     },
     /**
@@ -414,10 +412,10 @@ export default {
      */
     getInverseProportionality() {
       if (!this.isError) {
-        this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, ',', '.')
+        this.$refs.screen.innerHTML = String(this.$refs.screen.innerHTML).replace(',', '.');
         this.$refs.screen.innerHTML = 1 / Number(this.$refs.screen.innerHTML);
         this.transformResult();
-        this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, '.', ',')
+        this.$refs.screen.innerHTML = String(this.$refs.screen.innerHTML).replace('.', ',');
         this.isMadeCalculation = true;
       }
     },
@@ -426,12 +424,12 @@ export default {
      * @returns void
      */
     getSinOrCosValue(operation) {
-      this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, ',', '.')
+      this.$refs.screen.innerHTML = String(this.$refs.screen.innerHTML).replace(',', '.');
       this.$refs.screen.innerHTML = Math[operation](
         Number(this.$refs.screen.innerHTML)
       );
       this.transformResult();
-      this.$refs.screen.innerHTML = this.stringReplace(this.$refs.screen.innerHTML, '.', ',')
+      this.$refs.screen.innerHTML = String(this.$refs.screen.innerHTML).replace('.', ',');
       this.isMadeCalculation = true;
       this.isError = false;
     },
@@ -445,27 +443,12 @@ export default {
       }
     },
     /**
-     * замена символа в строке (метод для замены запятых и точек в значении)
-     * @param {Number, String} - строка со значением
-     * @param {String} replacingElem - заменяемый символ или часть строки
-     * @param {String} replacуTo - символ или часть строки, на который планируется замена
-     * @returns {String}
-     */
-    stringReplace(value, replacingElem, replaceTo) {
-      if (String(value).includes(replacingElem)) {
-        const newValue = String(value).replace(replacingElem, replaceTo)
-        return newValue
-      } else {
-        return value
-      }
-    },
-    /**
      * сохранение в ячейку памяти значения на экране
      * @returns void
      */
     memorySave() {
       if (!this.isError) {
-        this.memoryValue = this.stringReplace(this.$refs.screen.innerHTML, ',', '.');
+        this.memoryValue = new Decimal(String(this.$refs.screen.innerHTML).replace(',', '.'));
         this.isMadeCalculation = true;
       }
     },
@@ -476,7 +459,7 @@ export default {
     memoryRecovery() {
       if (!this.isError) {
         this.$refs.screen.innerHTML =
-          this.memoryValue == "" ? 0 : this.stringReplace(this.memoryValue, '.', ',');
+          this.memoryValue == "" ? 0 : String(this.memoryValue.toNumber()).replace('.', ',');
       }
     },
     /**
@@ -487,8 +470,8 @@ export default {
       if (!this.isError) {
         this.memoryValue =
           this.memoryValue == ""
-            ? (this.memoryValue = 0 + Number(this.stringReplace(this.$refs.screen.innerHTML, ',', '.')))
-            : Number(this.stringReplace(this.$refs.screen.innerHTML, ',', '.')) + this.memoryValue;
+            ? this.memoryValue = new Decimal(Number(String(this.$refs.screen.innerHTML).replace(',', '.')))
+            : new Decimal(Number(String(this.$refs.screen.innerHTML).replace(',', '.'))).plus(this.memoryValue);
         this.isMadeCalculation = true;
       }
     },
@@ -500,8 +483,8 @@ export default {
       if (!this.isError) {
         this.memoryValue =
           this.memoryValue == ""
-            ? (this.memoryValue = 0 - Number(this.stringReplace(this.$refs.screen.innerHTML, ',', '.')))
-            : Number(this.stringReplace(this.$refs.screen.innerHTML, ',', '.')) - Number(this.memoryValue);
+            ? this.memoryValue = new Decimal(0).sub(new Decimal(Number(String(this.$refs.screen.innerHTML).replace(',', '.'))))
+            : this.memoryValue.sub(new Decimal(Number(String(this.$refs.screen.innerHTML).replace(',', '.'))));
         this.isMadeCalculation = true;
       }
     },
@@ -547,12 +530,18 @@ export default {
 .calculator__wrapper {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: nowrap;
   width: 100%;
   height: 100%;
 }
 .calculator__header {
   display: flex;
+  flex-direction: row;
   justify-content: flex-end;
+  align-items: stretch;
+  flex-wrap: nowrap;
   width: 100%;
   height: 30px;
   background: #00838f;
@@ -560,8 +549,10 @@ export default {
 }
 .calculator__hide-btn {
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
+  flex-wrap: nowrap;
   width: 30px;
   height: 30px;
   border: none;
@@ -584,8 +575,10 @@ export default {
 .screen {
   background: white;
   display: flex;
+  flex-direction: row;
   justify-content: flex-end;
   align-items: center;
+  flex-wrap: nowrap;
   width: 100%;
   height: 100%;
   font-family: Noto Sans;
@@ -602,6 +595,7 @@ export default {
 }
 .calculator__keyboard {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
@@ -610,8 +604,10 @@ export default {
 }
 .keyboard__btn {
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
+  flex-wrap: nowrap;
   width: 60px;
   height: 60px;
   cursor: pointer;
@@ -634,6 +630,7 @@ export default {
   height: 28px;
   font-size: 15px;
   position: absolute;
+  z-index: 2;
   bottom: 3px;
   left: 5px;
 }
@@ -643,6 +640,7 @@ export default {
   height: 28px;
   font-size: 15px;
   position: absolute;
+  z-index: 3;
   top: 3px;
   left: 5px;
 }
@@ -654,11 +652,13 @@ export default {
 }
 .memory-sign__image {
   position: absolute;
+  z-index: 2;
   bottom: 0px;
   left: 0px;
 }
 .error-sign__image {
   position: absolute;
+  z-index: 2;
   left: 0px;
   top: 0px;
 }

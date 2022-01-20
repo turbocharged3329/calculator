@@ -49,16 +49,14 @@ export default {
   bind: function (el, binding) {
     let options = binding.value;
 
-    options = !options
+    options = typeof options == 'object' && Object.keys(options).length > 0
       ? defaultOptions
       : {
           ...defaultOptions,
           ...binding.value,
         };
 
-    $(el).draggable({
-        ...options
-    });
+    $(el).draggable(options);
 
     el.disableDrag = function (isDisabled) {
       $(el).draggable("option", "disabled", isDisabled);

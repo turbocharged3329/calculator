@@ -1,16 +1,18 @@
 import Vue from 'vue'
 import App from './App.vue'
-import draggableDirective from '@/components/directives/draggable'
-import resizableDirective from '@/components/directives/resizable'
-import Decimal from 'decimal.js';
+import draggableDirective from '@/directives/draggable'
+import resizableDirective from '@/directives/resizable'
+import router from './router';
+import VueRouter from 'vue-router'
 
 Vue.config.productionTip = false
 
+Vue.use(VueRouter)
 Vue.directive('draggable', draggableDirective)
 Vue.directive('resizable', resizableDirective)
 
 new Vue({
-  Decimal,
+  router,
   render: h => h(App),
 }).$mount('#app')
 
