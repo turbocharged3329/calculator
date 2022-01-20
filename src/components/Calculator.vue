@@ -16,7 +16,7 @@
           <div class="screen__error-sign" v-show="isError">
             <img :src="require('@/assets/img/calculator/error.svg')" class="error-sign__image" />
           </div>
-          <p class="screen__value" ref="screen"></p>
+          <p class="screen__value" ref="screen">{{ screenValue }}</p>
         </div>
       </div>
       <div class="calculator__keyboard">
@@ -137,6 +137,7 @@ export default {
       maxValueLength: 13, //максимальная длина значения на экране калькулятора
       memoryValue: "", //значения в ячейке памяти калькулятора
       isError: false, //ошибка, сообщающая о превышении допустимого значения калькулятора
+      screenValue: '',
     };
   },
   computed: {
@@ -153,7 +154,7 @@ export default {
   },
   mounted() {
     //при монтировании компонента на экране калькулятора появляется число 0
-    this.$refs.screen.innerHTML = 0;
+    this.screenValue = '0';
   },
   methods: {
     /**
@@ -171,37 +172,37 @@ export default {
     addNumber(number) {
       if (!this.isError) {
         //если в данный момент на экране 0, то заменяем его новым введенным значением
-        if (this.$refs.screen.innerHTML === "0") {
-          this.$refs.screen.innerHTML = "";
+        if (this.screenValue === "0") {
+          this.screenValue = "";
         }
         //если на экране результат только что выполненного вычисления, то записываем его в переменную
-        if (this.$refs.screen.innerHTML !== 0 && this.isMadeCalculation) {
+        if (this.screenValue !== 0 && this.isMadeCalculation) {
           this.isMadeCalculation = false;
-          this.lastOperand = this.$refs.screen.innerHTML;
-          this.$refs.screen.innerHTML = "";
+          this.lastOperand = this.screenValue;
+          this.screenValue = "";
         }
         //если уже был введен первый операнд, то активируем флаг и позволяем вводить значение второго операнда
         if (!this.isSecondOperand) {
           if (this.prevValue && this.operationName) {
             this.isSecondOperand = true;
-            this.$refs.screen.innerHTML = "";
+            this.screenValue = "";
           }
         }
         //если вводится запятая
         if (number == ",") {
           //если в значении на экране еще нет запятой
-          if (!this.$refs.screen.innerHTML.includes(",")) {
-            this.$refs.screen.innerHTML =
-              this.$refs.screen.innerHTML == 0
-                ? (this.$refs.screen.innerHTML += "0,")
-                : (this.$refs.screen.innerHTML += ",");
+          if (!String(this.screenValue).includes(",")) {
+            this.screenValue =
+              this.screenValue == 0
+                ? (this.screenValue += "0,")
+                : (this.screenValue += ",");
           }
         } else {
           //если значение превышает допустимую длину, то показываем ошибку
-          if ((this.$refs.screen.innerHTML + number).length > this.maxValueLength - 1) {
+          if ((this.screenValue + number).length > this.maxValueLength - 1) {
             return
           } else {
-            this.$refs.screen.innerHTML += number;
+            this.screenValue += number;
           }
         }
 
@@ -213,10 +214,10 @@ export default {
      * @returns void
      */
     deleteNumber() {
-        let result = this.$refs.screen.innerHTML.split("");
+        let result = String(this.screenValue).split("");
         result.splice(result.length - 1, 1);
   
-        this.$refs.screen.innerHTML = result.length == 0 || result == '-' ? 0 : result.join("");
+        this.screenValue = result.length == 0 || result == '-' ? 0 : result.join("");
     },
     /**
      * изменение знака значения на дисплее калькулятора
@@ -224,10 +225,10 @@ export default {
      */
     changeSign() {
       if (!this.isError) {
-        this.$refs.screen.innerHTML = String(this.$refs.screen.innerHTML).replace(',', '.')
-        this.$refs.screen.innerHTML = -this.$refs.screen.innerHTML;
+        this.screenValue = String(this.screenValue).replace(',', '.')
+        this.screenValue = -this.screenValue;
         this.transformResult()
-        this.$refs.screen.innerHTML = String(this.$refs.screen.innerHTML).replace('.', ',')
+        this.screenValue = String(this.screenValue).replace('.', ',')
       }
     },
     /**
@@ -238,7 +239,7 @@ export default {
     setOperation(name) {
       if (!this.isError) {
         this.operationName = name;
-        this.prevValue = String(this.$refs.screen.innerHTML).replace(',', '.');
+        this.prevValue = String(this.screenValue).replace(',', '.');
       }
     },
     /**
@@ -255,18 +256,18 @@ export default {
         }
         //если нажимают на равно без указания операции, то возвращаем последний операнд
         if (
-          this.$refs.screen.innerHTML > 0 && this.operationName == "" && !this.isMadeCalculation && this.lastOperand
+          this.screenValue > 0 && this.operationName == "" && !this.isMadeCalculation && this.lastOperand
         ) {
-          this.$refs.screen.innerHTML = this.lastOperand;
+          this.screenValue = this.lastOperand;
           return
         }
 
         //заменяем запятую на точку в значениях
-        this.$refs.screen.innerHTML = String(this.$refs.screen.innerHTML).replace(',', '.');
+        this.screenValue = String(this.screenValue).replace(',', '.');
         this.prevValue = String(this.prevValue).replace(',', '.');
-  
-        this.$refs.screen.innerHTML = new Decimal(this.$refs.screen.innerHTML)
-        const screenResult = new Decimal(this.$refs.screen.innerHTML)
+        
+        this.screenValue = new Decimal(this.screenValue)
+        const screenResult = new Decimal(this.screenValue)
         this.prevValue = new Decimal(this.prevValue)
         
         //производим вычисления
@@ -276,7 +277,7 @@ export default {
               ? this.prevValue
               : screenResult;
             this.lastOperation = "sum";
-            this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand
+            this.screenValue = this.isMadeWithoutSecondOperand
               ? screenResult.plus(this.prevValue) 
               : this.prevValue.plus(screenResult);
   
@@ -288,7 +289,7 @@ export default {
               : screenResult;
             this.lastOperation = "subst";
   
-            this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand
+            this.screenValue = this.isMadeWithoutSecondOperand
               ? screenResult.minus(this.prevValue)
               : this.prevValue.minus(screenResult);
   
@@ -300,7 +301,7 @@ export default {
               : screenResult;
             this.lastOperation = "mult";
   
-            this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand
+            this.screenValue = this.isMadeWithoutSecondOperand
               ? screenResult.mul(this.prevValue)
               : this.prevValue.mul(screenResult);
   
@@ -315,18 +316,18 @@ export default {
             if (this.isMadeWithoutSecondOperand) {
               //исключаем делеие на 0
               if (this.prevValue == '0') {
-                this.$refs.screen.innerHTML = 0;
+                this.screenValue = 0;
                 this.isError = true;
               } else {
-                this.$refs.screen.innerHTML = screenResult.div(this.prevValue)
+                this.screenValue = screenResult.div(this.prevValue)
               }
             } else {
               //исключаем делеие на 0
-              if (this.$refs.screen.innerHTML == '0') {
-                this.$refs.screen.innerHTML = 0;
+              if (this.screenValue == '0') {
+                this.screenValue = 0;
                 this.isError = true;
               } else {
-                this.$refs.screen.innerHTML = this.prevValue.div(screenResult)
+                this.screenValue = this.prevValue.div(screenResult)
               }
             }
   
@@ -338,7 +339,7 @@ export default {
               : screenResult;
             this.lastOperation = "pow";
   
-            this.$refs.screen.innerHTML = this.isMadeWithoutSecondOperand
+            this.screenValue = this.isMadeWithoutSecondOperand
               ? screenResult.pow(this.prevValue)
               : this.prevValue.pow(screenResult);
   
@@ -354,7 +355,7 @@ export default {
         this.operationName = "";
         this.transformResult();
         //заменяем точку на запятую в получившемся значении
-        this.$refs.screen.innerHTML = String(this.$refs.screen.innerHTML).replace('.', ',');
+        this.screenValue = String(this.screenValue).replace('.', ',');
       }
     },
     /**
@@ -363,14 +364,14 @@ export default {
      */
     transformResult() {
       //если получившийся результат больше допустимого значения, то показываем ошибку
-      if (Number(this.$refs.screen.innerHTML) > this.maxValue || String(this.$refs.screen.innerHTML).includes('e')) {
-        this.$refs.screen.innerHTML = 0;
+      if (Number(String(this.screenValue)) > this.maxValue || String(this.screenValue).includes('e')) {
+        this.screenValue = 0;
         this.isError = true;
       } else {
-        let result = this.$refs.screen.innerHTML.split("");
+        let result = String(this.screenValue).split("");
         //записываем в переменную количество знаков с конца значения, которое нужно удалить, чтобы значение поместилось на экране
-        const numbersCountToDelete =
-          this.$refs.screen.innerHTML.length - this.maxValueLength;
+        const numbersCountToDelete = String(this.screenValue).length - this.maxValueLength;
+
         if (numbersCountToDelete > 0) {
           result.splice(
             result.length - 1 - numbersCountToDelete,
@@ -381,7 +382,7 @@ export default {
           if (result.filter(elem => elem === '0').length == this.maxValueLength - 3) {
             result = [1]
           }
-          this.$refs.screen.innerHTML = result.join("");
+          this.screenValue = result.join("");
         }
       }
     },
@@ -391,19 +392,19 @@ export default {
      */
     getSqrt() {
       if (!this.isError) {
-        this.$refs.screen.innerHTML = String(this.$refs.screen.innerHTML).replace(',', '.');
-        const screenResult = new Decimal(this.$refs.screen.innerHTML)
+        this.screenValue = String(this.screenValue).replace(',', '.');
+        const screenResult = new Decimal(this.screenValue)
         //исключаем выделение квадратного корня из отрицательного числа
         if (screenResult.toNumber() < 0) {
-          this.$refs.screen.innerHTML = 0;
+          this.screenValue = 0;
           this.isError = true;
         } else {
-          this.$refs.screen.innerHTML = screenResult.sqrt()
+          this.screenValue = screenResult.sqrt()
           this.transformResult();
           this.isMadeCalculation = true;
         }
   
-        this.$refs.screen.innerHTML = String(this.$refs.screen.innerHTML).replace('.', ',');
+        this.screenValue = String(this.screenValue).replace('.', ',');
       }
     },
     /**
@@ -412,10 +413,10 @@ export default {
      */
     getInverseProportionality() {
       if (!this.isError) {
-        this.$refs.screen.innerHTML = String(this.$refs.screen.innerHTML).replace(',', '.');
-        this.$refs.screen.innerHTML = 1 / Number(this.$refs.screen.innerHTML);
+        this.screenValue = String(this.screenValue).replace(',', '.');
+        this.screenValue = 1 / Number(this.screenValue);
         this.transformResult();
-        this.$refs.screen.innerHTML = String(this.$refs.screen.innerHTML).replace('.', ',');
+        this.screenValue = String(this.screenValue).replace('.', ',');
         this.isMadeCalculation = true;
       }
     },
@@ -424,12 +425,12 @@ export default {
      * @returns void
      */
     getSinOrCosValue(operation) {
-      this.$refs.screen.innerHTML = String(this.$refs.screen.innerHTML).replace(',', '.');
-      this.$refs.screen.innerHTML = Math[operation](
-        Number(this.$refs.screen.innerHTML)
+      this.screenValue = String(this.screenValue).replace(',', '.');
+      this.screenValue = Math[operation](
+        Number(this.screenValue)
       );
       this.transformResult();
-      this.$refs.screen.innerHTML = String(this.$refs.screen.innerHTML).replace('.', ',');
+      this.screenValue = String(this.screenValue).replace('.', ',');
       this.isMadeCalculation = true;
       this.isError = false;
     },
@@ -448,7 +449,7 @@ export default {
      */
     memorySave() {
       if (!this.isError) {
-        this.memoryValue = new Decimal(String(this.$refs.screen.innerHTML).replace(',', '.'));
+        this.memoryValue = new Decimal(String(this.screenValue).replace(',', '.'));
         this.isMadeCalculation = true;
       }
     },
@@ -458,7 +459,7 @@ export default {
      */
     memoryRecovery() {
       if (!this.isError) {
-        this.$refs.screen.innerHTML =
+        this.screenValue =
           this.memoryValue == "" ? 0 : String(this.memoryValue.toNumber()).replace('.', ',');
       }
     },
@@ -470,8 +471,8 @@ export default {
       if (!this.isError) {
         this.memoryValue =
           this.memoryValue == ""
-            ? this.memoryValue = new Decimal(Number(String(this.$refs.screen.innerHTML).replace(',', '.')))
-            : new Decimal(Number(String(this.$refs.screen.innerHTML).replace(',', '.'))).plus(this.memoryValue);
+            ? this.memoryValue = new Decimal(Number(String(this.screenValue).replace(',', '.')))
+            : new Decimal(Number(String(this.screenValue).replace(',', '.'))).plus(this.memoryValue);
         this.isMadeCalculation = true;
       }
     },
@@ -483,8 +484,8 @@ export default {
       if (!this.isError) {
         this.memoryValue =
           this.memoryValue == ""
-            ? this.memoryValue = new Decimal(0).sub(new Decimal(Number(String(this.$refs.screen.innerHTML).replace(',', '.'))))
-            : this.memoryValue.sub(new Decimal(Number(String(this.$refs.screen.innerHTML).replace(',', '.'))));
+            ? this.memoryValue = new Decimal(0).sub(new Decimal(Number(String(this.screenValue).replace(',', '.'))))
+            : this.memoryValue.sub(new Decimal(Number(String(this.screenValue).replace(',', '.'))));
         this.isMadeCalculation = true;
       }
     },
@@ -494,7 +495,7 @@ export default {
      */
     resetSecondOperand() {
       if (!this.isError) {
-        this.$refs.screen.innerHTML = 0;
+        this.screenValue = '0';
       }
     },
     /**
@@ -502,7 +503,7 @@ export default {
      * @returns void
      */
     resetCalcStateToDefault() {
-      this.$refs.screen.innerHTML = 0;
+      this.screenValue = '0';
       this.isSecondOperand = false;
       this.prevValue = "";
       this.operationName = "";
