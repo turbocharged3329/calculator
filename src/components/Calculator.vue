@@ -1,5 +1,5 @@
 <template>
-  <div class="calculator" v-if="!hidden">
+  <div class="calculator" v-if="shown">
     <div class="calculator__wrapper">
       <div class="calculator__header">
         <button class="calculator__hide-btn" @click.prevent.stop="hideCalc">
@@ -120,7 +120,7 @@ import {Decimal} from 'decimal.js';
 export default {
   name: "Calculator",
   props: {
-    hidden: {
+    shown: {
       type: Boolean,
       default: false,
     },
@@ -162,7 +162,7 @@ export default {
      * @return void
      */
     hideCalc() {
-      this.$emit("hidden", this.isHidden);
+      this.$emit("hide", true);
     },
     /**
      * добавление числа к значению на дисплее

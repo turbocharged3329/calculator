@@ -9,7 +9,6 @@ import jQuerryWidget from "@/mixins/jQuerryWidget";
 
 export default {
   name: "Draggable",
-  components: {},
   mixins: [ jQuerryWidget ],
   data() {
     return {

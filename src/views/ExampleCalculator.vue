@@ -1,10 +1,11 @@
 <template>
   <div class="example-calculator">
+    <button @click.prevent.stop="showCalc">Toggle Calc Visibility</button>
     <draggable  
       :options="{
         handle: '.calculator__header',
       }">
-      <calculator :hidden="false" />
+      <calculator :shown="isShownCalc" @hide="isShownCalc = false" />
     </draggable>
   </div>
 </template>
@@ -19,11 +20,16 @@ export default {
     Draggable,
     Calculator,
   },
-  props: {},
   data() {
-    return {}
+    return {
+      isShownCalc: false,
+    }
   },
-  methods: {}
+  methods: {
+    showCalc() {
+      this.isShownCalc = true
+    }
+  }
 }
 </script>
 
