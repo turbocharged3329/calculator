@@ -1,7 +1,7 @@
 <template>
   <div class="example-keyboard-input">
     <draggable>
-      <keyboard-input :maxlength="10"/>
+      <keyboard-input :maxlength="10" :styles="{'border': 'none'}" />
     </draggable>
   </div>
 </template>
@@ -24,4 +24,6 @@ export default {
 }
 </script>
 
-<style lang="css" scoped></style>
+<style lang="css" scoped>
+
+</style>

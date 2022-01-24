@@ -18,6 +18,7 @@
           </button>
         </div>
         <div class="keyboard__keys" :class="{'keyboard__keys-vertical': isVertical, 'keyboard__keys-horizontal' : !isVertical}">
+          <div class="keyboard__numbers">
           <div class="keyboard__btn"  @click.prevent.stop="addNumber('7')" :style="{'order' : isVertical ? '-15' : 'initial'}">
             <img class="btn__image" :src="require('@/assets/img/keyboard/number7.svg')" />
           </div>
@@ -29,9 +30,6 @@
           </div>
           <div class="keyboard__btn" @click.prevent.stop="changeSign" :style="{'order' : isVertical ? '-5' : 'initial'}">
             <img class="btn__image" :src="require('@/assets/img/keyboard/+_-.svg')" />
-          </div>
-          <div class="keyboard__btn" @click.prevent.stop="deleteNumber" :style="{'order' : isVertical ? '-3' : 'initial'}">
-            <img class="btn__image" :src="require('@/assets/img/keyboard/del.svg')" />
           </div>
           <div class="keyboard__btn" @click.prevent.stop="addNumber('4')" :style="{'order' : isVertical ? '-12' : 'initial'}">
             <img class="btn__image" :src="require('@/assets/img/keyboard/number4.svg')"/>
@@ -45,9 +43,6 @@
           <div class="keyboard__btn" @click.prevent.stop="addNumber(',')" :style="{'order' : isVertical ? '-4' : 'initial'}">
             <img class="btn__image" :src="require('@/assets/img/keyboard/dot.svg')" />
           </div>
-          <div class="keyboard__btn" :style="{'order' : isVertical ? '-2' : 'initial'}">
-            <img class="btn__image" :src="require('@/assets/img/keyboard/enter.svg')" />
-          </div>
           <div class="keyboard__btn" @click.prevent.stop="addNumber('1')" :style="{'order' : isVertical ? '-9' : 'initial'}">
             <img class="btn__image" :src="require('@/assets/img/keyboard/number1.svg')" />
           </div>
@@ -60,8 +55,17 @@
           <div class="keyboard__btn" @click.prevent.stop="addNumber('0')" :style="{'order' : isVertical ? '-6' : 'initial'}">
             <img class="btn__image" :src="require('@/assets/img/keyboard/number0.svg')" />
           </div>
-          <div class="keyboard__btn" @click.prevent.stop="resetState" :style="{'order' : isVertical ? '-1' : 'initial'}">
+          </div>
+          <div class="keyboard__operations">
+          <div class="keyboard__btn" @click.prevent.stop="resetState" :style="{'order' : isVertical ? '-1' : 'initial'}" :class="{'keyboard__btn-dedicated' : isVertical}">
             <img class="btn__image" :src="require('@/assets/img/keyboard/ac.svg')" />
+          </div>
+          <div class="keyboard__btn" :style="{'order' : isVertical ? '-2' : 'initial'}" :class="{'keyboard__btn-dedicated' : isVertical}">
+            <img class="btn__image" :src="require('@/assets/img/keyboard/enter.svg')"/>
+          </div>
+          <div class="keyboard__btn" @click.prevent.stop="deleteNumber" :style="{'order' : isVertical ? '-3' : 'initial'}" :class="{'keyboard__btn-dedicated' : isVertical}">
+            <img class="btn__image" :src="require('@/assets/img/keyboard/del.svg')" />
+          </div>
           </div>
         </div>
       </div>
@@ -100,6 +104,8 @@ export default {
   methods: {
     changeKeyboardOrientation() {
       this.isVertical = !this.isVertical
+      this.$emit('transform', this.isVertical);
+      this.$emit('orient');
     },
     /**
      * добавление числа к значению на дисплее
@@ -229,12 +235,26 @@ export default {
 .keyboard__btn:hover {
   background: #00727e;
 }
-.keyboard__btn-number {
-  background: #0097a7;
+.keyboard__btn-dedicated {
+  background: #008f9e;
+  width: 61.33px;
+  height: 61.33px;
 }
 .close-btn__image {
   display: block;
   width: 14px;
   height: 14px;
+}
+.keyboard__numbers {
+  display: flex;
+  flex-flow: row wrap;
+  height: 240px;
+  padding: 2px;
+}
+.keyboard__operations {
+  display: flex;
+  flex-flow: row wrap;
+  height: 60px;
+  background: #008f9e
 }
 </style>

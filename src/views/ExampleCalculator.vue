@@ -1,11 +1,16 @@
 <template>
   <div class="example-calculator">
-    <button @click.prevent.stop="showCalc">Toggle Calc Visibility</button>
+    <button @click.prevent.stop="isShownCalc = true">
+    Toggle Calc Visibility
+    </button>
     <draggable  
       :options="{
         handle: '.calculator__header',
       }">
-      <calculator :shown="isShownCalc" @hide="isShownCalc = false" />
+      <calculator 
+      v-if="isShownCalc" 
+      @hide="isShownCalc = $event"
+      />
     </draggable>
   </div>
 </template>
@@ -25,11 +30,6 @@ export default {
       isShownCalc: false,
     }
   },
-  methods: {
-    showCalc() {
-      this.isShownCalc = true
-    }
-  }
 }
 </script>
 

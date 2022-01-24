@@ -2,19 +2,24 @@
   <div class="keyboard-input">
     <input 
     type="text" 
+    ref="input"
     class="input__field" 
     v-model="currentValue" 
     :maxlength="maxlength" 
     @input.prevent.stop="inputValue($event)" 
-    @focus.prevent.stop="isShownKeyboard = true"
-    @blur.prevent.stop="showInput($event)"
+    @focus.prevent.stop="showInput($event)"
+    :style="styles"
+    :disabled="locked"
     />
-    <Keyboard 
+    <keyboard 
     v-model="currentValue" 
     :maxlength="maxlength" 
     :shown="isShownKeyboard" 
     :position="keyboardPosition"
-    @hide="isShownKeyboard = $event"/>
+    @hide="isShownKeyboard = $event"
+    @transform="isVertical = $event"
+    @orient="showInput"
+    />
   </div>
 </template>
 
@@ -29,6 +34,16 @@ export default {
     maxlength: {
       type: Number,
       default: 10
+    },
+    styles: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
+    locked: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -41,42 +56,139 @@ export default {
     };
   },
   methods: {
-    showInput(e) {
-      const coords = e.target.getBoundingClientRect();
-      // eslint-disable-next-line no-unused-vars
+    showInput() {
+      this.isShownKeyboard = true;
+
+      const coords = this.$refs.input.getBoundingClientRect();
       const documentWidth = document.documentElement.clientWidth 
-      // eslint-disable-next-line no-unused-vars
       const documentHeight = document.documentElement.clientHeight 
 
-      console.log(coords);
-
       if (documentHeight - coords.bottom > 335) {
-        this.keyboardPosition = {
-          top: `${coords.height + 5}px`,
-          left: '0px',
-        }
-      } else if ((documentWidth - coords.right > 304) && (documentHeight - coords.bottom - coords.height > 335)) {
-        this.keyboardPosition = {
-          top: '0px',
-          left: `${coords.width + 5}px`,
-        }
+        this.setKeyboardPosition('bottom', coords)
+      } else if (documentWidth - coords.right > 304) {
+        this.setKeyboardPosition('right', coords)
       } else if (coords.top > 335) {
-        this.keyboardPosition = {
-          top: `${0 - 335 - 5}px`,
-          left: '0px',
-        }
+        this.setKeyboardPosition('top', coords)
       } else if (coords.left > 304) {
-        this.keyboardPosition = {
-          top: '0px',
-          left: `-${304 + 5}px`,
-        }
+        this.setKeyboardPosition('left', coords)
       }
+    },
+    setKeyboardPosition(position, inputCoords) {
+      const documentWidth = document.documentElement.clientWidth 
+      const documentHeight = document.documentElement.clientHeight 
 
+
+      if (position == 'bottom') {
+        //если клавиатура расположена горизонтально
+        if (!this.isVertical) {
+          if (documentWidth - inputCoords.left < 304) {
+            this.keyboardPosition = {
+            top: `${inputCoords.height + 5}px`,
+            left: `-${inputCoords.width}px`,
+          }
+        } else {
+          this.keyboardPosition = {
+            top: `${inputCoords.height + 5}px`,
+            left: '0px',
+          }
+        } 
+        } else {
+          //если клавиатура расположена вертикально
+          if (documentWidth - inputCoords.right < 184 && 184 > inputCoords.width) {
+            this.keyboardPosition = {
+              top: `${inputCoords.height + 5}px`,
+              left: `-${184 - inputCoords.width}px`,
+            }
+          } else {
+            this.keyboardPosition = {
+              top: `${inputCoords.height + 5}px`,
+              left: '0px',
+            }
+          }
+        }
+      } else if (position == 'right') {
+        if (!this.isVertical) {
+          //если горизонтальный и не хватает места снизу - перемещаем наверх
+          if (documentHeight - inputCoords.top < 215) {
+            this.keyboardPosition = {
+            top: `${-215 + inputCoords.height}px`,
+            left: `${inputCoords.width + 5}px`,
+            }
+          } else {
+            this.keyboardPosition = {
+            top: '0px',
+            left: `${inputCoords.width + 5}px`,
+            }
+          }
+        } else {
+          //есди вертикальный, и не хватает места снизу
+          if (documentHeight - inputCoords.top < 335) {
+            this.keyboardPosition = {
+            top: `${-335 + inputCoords.height}px`,
+            left: `${inputCoords.width + 5}px`,
+            }
+          } else {
+            this.keyboardPosition = {
+            top: '0px',
+            left: `${inputCoords.width + 5}px`,
+            }
+          }
+        }
+      } else if (position == 'top') {
+        if (!this.isVertical) {
+          if (documentWidth - inputCoords.left < 304) {
+            this.keyboardPosition = {
+            top: `${- 215 - 5}px`,
+            left: `-${inputCoords.width}px`,
+            }
+          } else {
+            this.keyboardPosition = {
+              top: `${- 215 - 5}px`,
+              left: `0px`,
+            }}
+        } else {
+          //если клавиатура расположена вертикально
+          if (documentWidth - inputCoords.right < 184 && 184 > inputCoords.width) {
+            this.keyboardPosition = {
+              top: `${- 335 - 5}px`,
+              left: `-${184 - inputCoords.width}px`,
+            }
+          } else {
+            this.keyboardPosition = {
+              top: `${- 335 - 5}px`,
+              left: '0px',
+            }
+          }
+        } 
+      } 
+      // else if (position == 'left') {
+      //   console.log('left');
+      //    if (!this.isVertical) {
+      //     //если горизонтальный и не хватает места снизу - перемещаем наверх
+      //     if (documentHeight - inputCoords.top < 215) {
+      //       this.keyboardPosition = {
+      //       top: `${-215 + inputCoords.height}px`,
+      //       left: `${inputCoords.width + 5}px`,
+      //       }
+      //     } else {
+      //       this.keyboardPosition = {
+      //       top: '0px',
+      //       left: `${inputCoords.width + 5}px`,
+      //       }
+      //     }
+      //   } else {
+      //     this.keyboardPosition = {
+      //       top: '0px',
+      //       left: `-${304 + 5}px`,
+      //     }
+      //   }
+        
+      // }
     },
     inputValue(e) {
-      let value = e.target.value.split('')
-      value = value.filter(elem => this.allowedSymbols.includes(elem))
-      this.currentValue = value.join('')
+        let value = e.target.value.split('')
+        value = value.filter(elem => this.allowedSymbols.includes(elem))
+        this.currentValue = value.join('')
     },
   }
 };
@@ -99,6 +211,9 @@ export default {
   background: #00838f;
   border-radius: 10px 10px 5px 5px;
   overflow: hidden;
+}
+.input__field:disabled {
+  background: white;
 }
 .keyboard-vertical {
   width: 184px;
