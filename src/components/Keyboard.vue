@@ -214,7 +214,7 @@ export default {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  padding: 2px 0;
+  /* padding: 2px 0; */
   background: #0097A7
 }
 .keyboard__keys-horizontal {
@@ -237,8 +237,6 @@ export default {
 }
 .keyboard__btn-dedicated {
   background: #008f9e;
-  width: 61.33px;
-  height: 61.33px;
 }
 .close-btn__image {
   display: block;
@@ -249,12 +247,14 @@ export default {
   display: flex;
   flex-flow: row wrap;
   height: 240px;
-  padding: 2px;
+  padding: 2px 2px 0px 2px;
 }
 .keyboard__operations {
   display: flex;
   flex-flow: row wrap;
-  height: 60px;
-  background: #008f9e
+  height: 62px;
+  background: #008f9e;
+  width: 184px;
+  justify-content: center;
 }
 </style>
