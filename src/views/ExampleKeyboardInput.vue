@@ -1,7 +1,7 @@
 <template>
   <div class="example-keyboard-input">
     <draggable>
-      <keyboard-input :maxlength="10" :styles="{'border': 'none'}" />
+      <keyboard-input :maxlength="10" :styles="{'border': 'none'}"/>
     </draggable>
   </div>
 </template>
